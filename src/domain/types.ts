@@ -29,6 +29,8 @@ export type BuilderProfile = {
   capacity: string
   acceptedWork: number
   receiptIds: string[]
+  address?: string
+  ensName?: string
 }
 
 export type GitHubTarget = {

@@ -2,7 +2,9 @@ import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { defaultProfile, useAppState } from '../store'
 import { navigate } from '../router'
-import { Button, Field, PageHeader, PublicShell } from '../components'
+import { resolveEns, shortenAddress } from '../domain/ens'
+import type { EnsIdentity } from '../domain/ens'
+import { Badge, Button, Field, PageHeader, PublicShell } from '../components'
 
 export function Landing() {
   return (
@@ -44,10 +46,20 @@ export function Onboarding({ setState }: { setState: ReturnType<typeof useAppSta
   const [skills, setSkills] = useState('React, agent workflows, technical writing')
   const [ecosystems, setEcosystems] = useState('Ethereum, GitHub, open source')
   const [capacity, setCapacity] = useState('6 focused hours this weekend')
+  const [identity, setIdentity] = useState('')
+  const [ens, setEns] = useState<EnsIdentity | null>(null)
+  const [resolving, setResolving] = useState(false)
+
+  async function resolveIdentity() {
+    setResolving(true)
+    setEns(await resolveEns(identity))
+    setResolving(false)
+  }
 
   function submit(event: FormEvent) {
     event.preventDefault()
-    setState((state) => ({ ...state, profile: defaultProfile(name, email, skills, ecosystems, capacity) }))
+    const resolvedIdentity = ens?.resolved ? { address: ens.address, ensName: ens.ensName } : undefined
+    setState((state) => ({ ...state, profile: defaultProfile(name, email, skills, ecosystems, capacity, resolvedIdentity) }))
     navigate('/app')
   }
 
@@ -63,6 +75,23 @@ export function Onboarding({ setState }: { setState: ReturnType<typeof useAppSta
           <Field label="Skills" value={skills} onChange={setSkills} />
           <Field label="Ecosystems" value={ecosystems} onChange={setEcosystems} />
           <Field label="Capacity" value={capacity} onChange={setCapacity} />
+          <div className="field">
+            <label>ENS name or wallet address (optional)</label>
+            <div className="inline-field">
+              <input className="input" value={identity} onChange={(event) => setIdentity(event.target.value)} placeholder="builder.eth or 0x..." />
+              <Button onClick={resolveIdentity} disabled={resolving || !identity.trim()}>{resolving ? 'Resolving…' : 'Resolve'}</Button>
+            </div>
+            {ens && (
+              <div className="identity-result">
+                <Badge label={ens.resolved ? 'Live · ENS' : 'Not resolved'} tone={ens.resolved ? 'good' : 'warn'} />
+                <span className="identity-note">
+                  {ens.resolved
+                    ? `${ens.ensName ?? 'Address'}${ens.address ? ` · ${shortenAddress(ens.address)}` : ''}`
+                    : ens.note}
+                </span>
+              </div>
+            )}
+          </div>
           <Button type="submit" variant="primary">Continue</Button>
         </form>
       </main>

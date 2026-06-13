@@ -33,7 +33,14 @@ export function useAppState() {
   return useMemo(() => ({ state, setState }), [state])
 }
 
-export function defaultProfile(name: string, email: string, skills: string, ecosystems: string, capacity: string): BuilderProfile {
+export function defaultProfile(
+  name: string,
+  email: string,
+  skills: string,
+  ecosystems: string,
+  capacity: string,
+  identity?: { address?: string; ensName?: string },
+): BuilderProfile {
   return {
     name,
     email,
@@ -42,5 +49,7 @@ export function defaultProfile(name: string, email: string, skills: string, ecos
     capacity,
     acceptedWork: 0,
     receiptIds: [],
+    address: identity?.address,
+    ensName: identity?.ensName,
   }
 }

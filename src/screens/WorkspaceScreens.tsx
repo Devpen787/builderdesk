@@ -13,6 +13,7 @@ import { upsert } from '../domain/collection'
 import { importGitHubOpportunity } from '../domain/github'
 import { scoreOpportunity } from '../domain/scoring'
 import type { AgentTrace } from '../domain/types'
+import { identityLabel } from '../domain/ens'
 import { useAppState } from '../store'
 import { navigate } from '../router'
 import { Badge, Button, EmptyState, Field, PageHeader, Panel, ProofDisclosure } from '../components'
@@ -190,6 +191,7 @@ export function Receipt({ state, id }: { state: State; id: string }) {
   const pkg = receipt ? state.packages.find((item) => item.id === receipt.packageId) : undefined
   const packet = receipt ? state.packets.find((item) => item.id === receipt.packetId) : undefined
   const output = receipt ? verifyReceipt(receipt, pkg, packet) : { valid: false, message: 'Receipt is not available on this device.' }
+  const builder = identityLabel(state.profile?.ensName, state.profile?.address)
   if (!receipt) return <EmptyState title="Receipt not found" body="This device does not have that local receipt. Open profile or recreate from the submission package." />
 
   return (
@@ -200,6 +202,7 @@ export function Receipt({ state, id }: { state: State; id: string }) {
           <div>
             <div className="receipt-id tnum">{receipt.id}</div>
             <h3 className="receipt-card-title">{packet?.userProblem ?? 'Unknown pursuit'}</h3>
+            {builder && <div className="row-meta">Builder: {builder}</div>}
           </div>
           <Badge label={output.valid ? 'Verified locally' : 'Recovery needed'} tone={output.valid ? 'good' : 'warn'} />
         </div>
@@ -220,6 +223,9 @@ export function Profile({ state }: { state: State }) {
         <p>{state.profile ? `${state.profile.skills} · ${state.profile.capacity}` : 'Create a local profile before pursuing work.'}</p>
       </PageHeader>
       <div className="row-list">
+        {identityLabel(state.profile?.ensName, state.profile?.address) && (
+          <div className="row"><div><div className="row-title">Builder identity</div><div className="row-meta">{identityLabel(state.profile?.ensName, state.profile?.address)}</div></div><Badge label={state.profile?.ensName ? 'Live · ENS' : 'Address'} tone={state.profile?.ensName ? 'good' : 'info'} /></div>
+        )}
         <div className="row"><div><div className="row-title">Accepted work</div><div className="row-meta">Updated only when a local receipt verifies against a released package.</div></div><Badge label={`${state.profile?.acceptedWork ?? 0} receipts`} tone="good" /></div>
         {state.receipts.map((receipt) => (
           <div className="row" key={receipt.id}><div><div className="row-title">{receipt.id}</div><div className="row-meta">{receipt.profileDelta} · {receipt.verifierDigest}</div></div><Button onClick={() => navigate(`/receipts/${receipt.id}`)}>Open receipt</Button></div>

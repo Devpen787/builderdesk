@@ -302,6 +302,29 @@ summary {
   margin-top: var(--space3);
 }
 
+.inline-field {
+  display: flex;
+  gap: var(--space2);
+  align-items: stretch;
+}
+
+.inline-field .input {
+  flex: 1;
+}
+
+.identity-result {
+  display: flex;
+  align-items: center;
+  gap: var(--space2);
+  margin-top: var(--space2);
+}
+
+.identity-note {
+  color: var(--ink-muted);
+  font-size: var(--small-size);
+  font-variant-numeric: tabular-nums;
+}
+
 @media (max-width: 860px) {
   .nav-link {
     text-align: center;
