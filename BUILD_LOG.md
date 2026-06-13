@@ -9,7 +9,8 @@ Use this log to keep the work traceable and avoid large opaque commits.
 | 3 | `8e7b89e` | Split screens and styles under the 400-line source-file rule | `npm run test`, `npm run build`, `npm run lint` |
 | 4 | `43179d1` | Added Playwright screenshot QA, clean-state journey, live-source seed fix, mobile receipt/profile overflow checks | `npm run test`, `npm run build`, `npm run lint`, `npm run qa:screenshots` |
 | 5 | `03a14db` | Recorded screenshot evidence in the repo | `qa/screenshots-wave1/` committed |
-| 6 | pending | Published GitHub repo and Vercel production deployment | GitHub: `https://github.com/Devpen787/builderdesk`; Vercel: `https://builderdesk-roan.vercel.app` |
+| 6 | `d73f6ac` | Published GitHub repo and Vercel production deployment | GitHub: `https://github.com/Devpen787/builderdesk`; Vercel: `https://builderdesk-roan.vercel.app` |
+| W2 | (branch) | Wave 2: design tokens + brand mark + product components + real /brand-lab; ENS identity (live); Privy login/wallet/signed release (configured); Google Cloud Gemini insight (configured); agent-purple + export/copy | `npm run test`, `build`, `lint`, `qa:screenshots` per commit |
 
 ## Screenshot Evidence
 

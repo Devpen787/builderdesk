@@ -30,6 +30,16 @@ live GitHub source import -> opportunity radar -> pursuit packet -> accountable 
 - Verify the receipt locally.
 - Update a builder profile from accepted work.
 
+## Sponsor Integrations
+
+Honest, load-bearing primitives (full breakdown in [docs/SPONSORS.md](docs/SPONSORS.md)):
+
+- **ENS** (`live`): builder identity resolved (forward + reverse) over a public RPC; shown on profile and receipt.
+- **Privy** (`configured`): email login + embedded wallet; the human release is signed. Set `VITE_PRIVY_APP_ID`.
+- **Google Cloud** (`configured`): Gemini qualification insight on the pursuit screen. Set `GEMINI_API_KEY`.
+
+Each degrades gracefully: the full loop runs offline with no keys, and nothing is labeled `live` on a key-less path. Demo script: [docs/DEMO.md](docs/DEMO.md).
+
 ## What Is Not In Wave 1
 
 - No wallet-first onboarding.
@@ -57,6 +67,14 @@ npm run dev
 npm run test
 npm run build
 npm run qa:screenshots
+```
+
+Optional environment variables (graceful fallback when absent):
+
+```bash
+VITE_PRIVY_APP_ID=...   # Privy login + embedded wallet + signed release
+GEMINI_API_KEY=...      # Google Cloud (Gemini) qualification insight
+VITE_GITHUB_TOKEN=...   # higher GitHub import rate limits
 ```
 
 ## Published Wave 1
