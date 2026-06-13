@@ -52,7 +52,21 @@ export function Button({
 }
 
 export function Badge({ label, tone }: { label: string; tone: string }) {
-  return <span className={`badge ${tone}`}>{label}</span>
+  return (
+    <span className={`badge ${tone}`}>
+      <span className="badge-dot" aria-hidden="true" />
+      {label}
+    </span>
+  )
+}
+
+export function ProofDisclosure({ summary, children }: { summary: string; children: ReactNode }) {
+  return (
+    <details className="proof-disclosure">
+      <summary>{summary}</summary>
+      <div className="proof-disclosure-body">{children}</div>
+    </details>
+  )
 }
 
 export function PublicShell({ children }: { children: ReactNode }) {

@@ -16,7 +16,7 @@ import { scoreBandCopy, sourceStateCopy } from '../domain/status'
 import type { AgentTrace } from '../domain/types'
 import { useAppState } from '../store'
 import { navigate } from '../router'
-import { Badge, Button, EmptyState, Field, PageHeader, Panel } from '../components'
+import { Badge, Button, EmptyState, Field, PageHeader, Panel, ProofDisclosure } from '../components'
 
 type AppStore = ReturnType<typeof useAppState>
 type State = AppStore['state']
@@ -100,7 +100,7 @@ export function Radar({ state, setState }: { state: State; setState: SetState })
                 <div>
                   <div className="row-title">{opportunity.title}</div>
                   <div className="row-meta">{scorecard.score}/100 · {scorecard.summary}</div>
-                  <details style={{ marginTop: 10 }}><summary>Why this score?</summary><p>{scorecard.reasons.join(', ')}</p></details>
+                  <ProofDisclosure summary="Why this score?"><p>{scorecard.reasons.join(', ')}</p></ProofDisclosure>
                 </div>
                 <div className="actions" style={{ marginTop: 0 }}>
                   <Badge label={band.label} tone={band.tone} />
@@ -187,7 +187,7 @@ export function Submission({ state, id, setState }: { state: State; id: string; 
       <Panel>
         <h3>{pkg.summary}</h3>
         <List items={pkg.deliverables} />
-        <details style={{ marginTop: 18 }}><summary>Evidence checklist</summary><List items={pkg.evidenceChecklist} /></details>
+        <ProofDisclosure summary="Evidence checklist"><List items={pkg.evidenceChecklist} /></ProofDisclosure>
       </Panel>
     </>
   )

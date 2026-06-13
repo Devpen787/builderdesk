@@ -139,9 +139,18 @@
 }
 
 .badge {
+  gap: 6px;
   padding: var(--space1) var(--space2);
   border-radius: 999px;
   font-size: var(--micro-size);
+}
+
+.badge-dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: currentColor;
 }
 
 .badge.good {
@@ -280,6 +289,14 @@ details {
 summary {
   cursor: pointer;
   font-weight: 800;
+}
+
+.proof-disclosure {
+  margin-top: var(--space3);
+}
+
+.proof-disclosure-body {
+  margin-top: var(--space3);
 }
 
 @media (max-width: 860px) {
