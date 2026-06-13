@@ -28,8 +28,8 @@
   position: sticky;
   top: 0;
   height: 100svh;
-  padding: 22px;
-  background: #11162a;
+  padding: var(--space5);
+  background: var(--ink);
   color: white;
 }
 
