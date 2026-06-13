@@ -14,6 +14,7 @@ import { importGitHubOpportunity } from '../domain/github'
 import { scoreOpportunity } from '../domain/scoring'
 import type { AgentTrace } from '../domain/types'
 import { identityLabel } from '../domain/ens'
+import { useBuilderAuth } from '../auth/privy'
 import { useAppState } from '../store'
 import { navigate } from '../router'
 import { Badge, Button, EmptyState, Field, PageHeader, Panel, ProofDisclosure } from '../components'
@@ -159,11 +160,18 @@ export function Workroom({ state, id, setState }: { state: State; id: string; se
 export function Submission({ state, id, setState }: { state: State; id: string; setState: SetState }) {
   const packet = state.packets.find((item) => item.id === id)
   const pkg = state.packages.find((item) => item.packetId === id)
+  const auth = useBuilderAuth()
   if (!packet || !pkg) return <EmptyState title="No submission package" body="Prepare the package from the workroom before releasing." />
 
-  function createReceipt() {
+  async function createReceipt() {
     const released = releaseSubmissionPackage(pkg!)
-    const receipt = createAcceptedWorkReceipt(released, packet!)
+    let receipt = createAcceptedWorkReceipt(released, packet!)
+    if (auth.signMessage) {
+      const signature = await auth.signMessage(`BuilderDesk human release · ${receipt.id} · digest ${receipt.verifierDigest}`)
+      if (signature) {
+        receipt = { ...receipt, releaseSignature: signature, releasedBy: identityLabel(state.profile?.ensName, state.profile?.address) }
+      }
+    }
     setState((current) => ({
       ...current,
       packages: upsert(current.packages, released, 'id'),
@@ -204,7 +212,10 @@ export function Receipt({ state, id }: { state: State; id: string }) {
             <h3 className="receipt-card-title">{packet?.userProblem ?? 'Unknown pursuit'}</h3>
             {builder && <div className="row-meta">Builder: {builder}</div>}
           </div>
-          <Badge label={output.valid ? 'Verified locally' : 'Recovery needed'} tone={output.valid ? 'good' : 'warn'} />
+          <div className="receipt-badges">
+            <Badge label={output.valid ? 'Verified locally' : 'Recovery needed'} tone={output.valid ? 'good' : 'warn'} />
+            {receipt.releaseSignature && <Badge label={`Signed release${receipt.releasedBy ? ` · ${receipt.releasedBy}` : ''}`} tone="info" />}
+          </div>
         </div>
         <div className="stat-strip">
           <div className="stat"><strong>{receipt.result}</strong><p>Result</p></div>

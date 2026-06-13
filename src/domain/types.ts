@@ -111,6 +111,8 @@ export type AcceptedWorkReceipt = {
   result: 'accepted'
   verifierDigest: string
   profileDelta: string
+  releaseSignature?: string
+  releasedBy?: string
 }
 
 export type AppState = {

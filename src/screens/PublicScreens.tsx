@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import { defaultProfile, useAppState } from '../store'
 import { navigate } from '../router'
 import { resolveEns, shortenAddress } from '../domain/ens'
 import type { EnsIdentity } from '../domain/ens'
+import { useBuilderAuth } from '../auth/privy'
 import { Badge, Button, Field, PageHeader, PublicShell } from '../components'
 
 export function Landing() {
@@ -49,12 +50,28 @@ export function Onboarding({ setState }: { setState: ReturnType<typeof useAppSta
   const [identity, setIdentity] = useState('')
   const [ens, setEns] = useState<EnsIdentity | null>(null)
   const [resolving, setResolving] = useState(false)
+  const auth = useBuilderAuth()
 
   async function resolveIdentity() {
     setResolving(true)
     setEns(await resolveEns(identity))
     setResolving(false)
   }
+
+  // When Privy provides a wallet, adopt it as the identity and ENS-resolve it.
+  useEffect(() => {
+    if (!(auth.configured && auth.authenticated && auth.address) || ens) return
+    const address = auth.address
+    let active = true
+    resolveEns(address).then((result) => {
+      if (!active) return
+      setIdentity(address)
+      setEns(result)
+    })
+    return () => {
+      active = false
+    }
+  }, [auth.configured, auth.authenticated, auth.address, ens])
 
   function submit(event: FormEvent) {
     event.preventDefault()
@@ -75,6 +92,19 @@ export function Onboarding({ setState }: { setState: ReturnType<typeof useAppSta
           <Field label="Skills" value={skills} onChange={setSkills} />
           <Field label="Ecosystems" value={ecosystems} onChange={setEcosystems} />
           <Field label="Capacity" value={capacity} onChange={setCapacity} />
+          {auth.configured && (
+            <div className="field">
+              <label>Wallet sign-in (Privy)</label>
+              {auth.authenticated && auth.address ? (
+                <div className="identity-result">
+                  <Badge label="Live · Privy wallet" tone="good" />
+                  <span className="identity-note">{shortenAddress(auth.address)}</span>
+                </div>
+              ) : (
+                <Button onClick={auth.login}>Sign in with Privy</Button>
+              )}
+            </div>
+          )}
           <div className="field">
             <label>ENS name or wallet address (optional)</label>
             <div className="inline-field">
