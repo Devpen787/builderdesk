@@ -33,7 +33,7 @@ await page.getByRole('button', { name: /import source/i }).click()
 await page.waitForURL('**/sources')
 await shot('03-sources-before-import-1280')
 await page.getByRole('button', { name: /import source/i }).click()
-await page.waitForSelector('.row-list .row', { timeout: 30_000 })
+await page.waitForSelector('.row-list .work-row', { timeout: 30_000 })
 await shot('04-sources-live-import-1280')
 
 await page.getByRole('button', { name: /radar/i }).click()

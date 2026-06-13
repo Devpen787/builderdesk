@@ -12,11 +12,11 @@ import {
 import { upsert } from '../domain/collection'
 import { importGitHubOpportunity } from '../domain/github'
 import { scoreOpportunity } from '../domain/scoring'
-import { scoreBandCopy, sourceStateCopy } from '../domain/status'
 import type { AgentTrace } from '../domain/types'
 import { useAppState } from '../store'
 import { navigate } from '../router'
 import { Badge, Button, EmptyState, Field, PageHeader, Panel, ProofDisclosure } from '../components'
+import { OpportunityRow, SourceHealthRow } from '../ui/product'
 
 type AppStore = ReturnType<typeof useAppState>
 type State = AppStore['state']
@@ -93,22 +93,14 @@ export function Radar({ state, setState }: { state: State; setState: SetState })
         <EmptyState title="Radar is empty" body="Import a live GitHub source before starting a pursuit." action={<Button variant="primary" onClick={() => navigate('/sources')}>Import source</Button>} />
       ) : (
         <div className="row-list">
-          {rows.map(({ opportunity, scorecard }) => {
-            const band = scoreBandCopy[scorecard.band]
-            return (
-              <div className="row" key={opportunity.id}>
-                <div>
-                  <div className="row-title">{opportunity.title}</div>
-                  <div className="row-meta">{scorecard.score}/100 · {scorecard.summary}</div>
-                  <ProofDisclosure summary="Why this score?"><p>{scorecard.reasons.join(', ')}</p></ProofDisclosure>
-                </div>
-                <div className="actions" style={{ marginTop: 0 }}>
-                  <Badge label={band.label} tone={band.tone} />
-                  <Button variant="primary" onClick={() => start(opportunity.id)} disabled={opportunity.sourceState === 'broken'}>Start pursuit</Button>
-                </div>
-              </div>
-            )
-          })}
+          {rows.map(({ opportunity, scorecard }) => (
+            <OpportunityRow
+              key={opportunity.id}
+              opportunity={opportunity}
+              scorecard={scorecard}
+              onStart={() => start(opportunity.id)}
+            />
+          ))}
         </div>
       )}
     </>
@@ -241,10 +233,9 @@ function SourceRows({ state }: { state: State }) {
   if (state.opportunities.length === 0) return <EmptyState title="No sources yet" body="Import a public GitHub issue or pull request to start the radar." />
   return (
     <div className="row-list" style={{ marginTop: 18 }}>
-      {state.opportunities.map((opportunity) => {
-        const copy = sourceStateCopy[opportunity.sourceState]
-        return <div className="row" key={opportunity.id}><div><div className="row-title">{opportunity.title}</div><div className="row-meta">{opportunity.target.owner}/{opportunity.target.repo} #{opportunity.target.number} · {copy.help}</div></div><Badge label={copy.label} tone={copy.tone} /></div>
-      })}
+      {state.opportunities.map((opportunity) => (
+        <SourceHealthRow key={opportunity.id} opportunity={opportunity} />
+      ))}
     </div>
   )
 }
