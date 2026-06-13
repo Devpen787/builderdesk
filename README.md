@@ -59,6 +59,11 @@ npm run build
 npm run qa:screenshots
 ```
 
+## Published Wave 1
+
+- GitHub: [Devpen787/builderdesk](https://github.com/Devpen787/builderdesk)
+- Vercel: [builderdesk-roan.vercel.app](https://builderdesk-roan.vercel.app)
+
 ## Core Routes
 
 - `/` landing

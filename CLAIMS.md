@@ -6,6 +6,7 @@ BuilderDesk separates working claims from configured and future claims.
 
 - Public GitHub issue or pull request URL import.
 - Local app state changes in the browser.
+- Production web app deployed to Vercel.
 
 ## Artifact
 
