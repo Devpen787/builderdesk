@@ -56,6 +56,7 @@ npm install
 npm run dev
 npm run test
 npm run build
+npm run qa:screenshots
 ```
 
 ## Core Routes
@@ -91,3 +92,9 @@ Then run a browser click-through from a reset state:
 6. release a submission package
 7. create and verify a receipt
 8. confirm the profile updates
+
+The automated screenshot pass writes inspection artifacts to:
+
+```text
+qa/screenshots-wave1/
+```

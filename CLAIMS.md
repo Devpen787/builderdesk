@@ -14,6 +14,7 @@ BuilderDesk separates working claims from configured and future claims.
 - Submission package.
 - Accepted-work receipt.
 - Local verifier output.
+- Browser QA screenshots in `qa/screenshots-wave1/`.
 
 ## Demo
 
