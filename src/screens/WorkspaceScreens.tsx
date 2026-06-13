@@ -203,15 +203,20 @@ export function Receipt({ state, id }: { state: State; id: string }) {
   return (
     <>
       <PageHeader eyebrow="Accepted-work receipt" title={output.valid ? 'Receipt verified' : 'Receipt needs recovery'} action={<Button onClick={() => navigate('/profile')}>Open profile</Button>}><p>{output.message}</p></PageHeader>
-      <Panel>
-        <Badge label={output.valid ? 'Verified locally' : 'Recovery needed'} tone={output.valid ? 'good' : 'warn'} />
-        <h3 style={{ marginTop: 18 }}>{packet?.userProblem ?? 'Unknown pursuit'}</h3>
+      <section className="panel panel-pad receipt-card">
+        <div className="receipt-card-head">
+          <div>
+            <div className="receipt-id tnum">{receipt.id}</div>
+            <h3 className="receipt-card-title">{packet?.userProblem ?? 'Unknown pursuit'}</h3>
+          </div>
+          <Badge label={output.valid ? 'Verified locally' : 'Recovery needed'} tone={output.valid ? 'good' : 'warn'} />
+        </div>
         <div className="stat-strip">
           <div className="stat"><strong>{receipt.result}</strong><p>Result</p></div>
-          <div className="stat"><strong>{receipt.verifierDigest}</strong><p>Verifier digest</p></div>
+          <div className="stat"><strong className="tnum">{receipt.verifierDigest}</strong><p>Verifier digest</p></div>
           <div className="stat"><strong>+1</strong><p>Profile accepted work</p></div>
         </div>
-      </Panel>
+      </section>
     </>
   )
 }

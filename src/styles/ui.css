@@ -59,6 +59,7 @@
   background: var(--surface);
   color: var(--ink);
   font-weight: 800;
+  white-space: nowrap;
   text-decoration: none;
 }
 
@@ -117,6 +118,41 @@
   line-height: 1;
   font-weight: 900;
   font-variant-numeric: tabular-nums;
+}
+
+/* Accepted-work receipt: the one screen that earns receipt-gold (BRANDLAB §4). */
+.receipt-card {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(199, 119, 0, 0.35);
+  background: linear-gradient(180deg, rgba(199, 119, 0, 0.08), transparent 140px), var(--surface);
+}
+
+.receipt-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: var(--receipt);
+}
+
+.receipt-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space4);
+}
+
+.receipt-id {
+  font-size: var(--title-size);
+  line-height: 1.1;
+  font-weight: 900;
+  color: var(--receipt);
+  overflow-wrap: anywhere;
+}
+
+.receipt-card-title {
+  margin-top: var(--space2);
 }
 
 .eyebrow,
