@@ -215,6 +215,7 @@ export function Submission({ state, id, setState }: { state: State; id: string; 
         <h3>{pkg.summary}</h3>
         <List items={pkg.deliverables} />
         <ProofDisclosure summary="Evidence checklist"><List items={pkg.evidenceChecklist} /></ProofDisclosure>
+        <div className="actions"><Button onClick={() => copyJson(pkg)}>Copy submission package</Button></div>
       </Panel>
     </>
   )
@@ -248,6 +249,7 @@ export function Receipt({ state, id }: { state: State; id: string }) {
           <div className="stat"><strong className="tnum">{receipt.verifierDigest}</strong><p>Verifier digest</p></div>
           <div className="stat"><strong>+1</strong><p>Profile accepted work</p></div>
         </div>
+        <div className="actions"><Button onClick={() => copyJson(receipt)}>Export receipt (JSON)</Button></div>
       </section>
     </>
   )
@@ -287,9 +289,18 @@ function WorkroomTrace({ trace }: { trace: AgentTrace }) {
   return (
     <div className="two-col">
       <Panel><h3>Work plan</h3><List items={trace.workPlan} /></Panel>
-      <Panel><h3>Guardrails</h3><Badge label="Demo helper" tone="info" /><h3 style={{ marginTop: 18 }}>Allowed</h3><List items={trace.allowedActions} /><h3 style={{ marginTop: 18 }}>Blocked</h3><List items={trace.blockedActions} /></Panel>
+      <Panel className="agent-panel">
+        <h3>Accountable agent</h3>
+        <div className="agent-meta"><Badge label="Demo helper" tone="agent" /><span className="row-meta">{trace.helperName}</span></div>
+        <h3 style={{ marginTop: 18 }}>Allowed</h3><List items={trace.allowedActions} />
+        <h3 style={{ marginTop: 18 }}>Blocked</h3><List items={trace.blockedActions} />
+      </Panel>
     </div>
   )
+}
+
+function copyJson(value: unknown) {
+  void navigator.clipboard?.writeText(JSON.stringify(value, null, 2))
 }
 
 function MetricRow({ title, meta, action, href }: { title: string; meta: string; action: string; href: string }) {

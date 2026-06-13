@@ -224,6 +224,31 @@
   background: var(--accent-soft);
 }
 
+.badge.agent {
+  color: var(--agent);
+  background: rgba(124, 58, 237, 0.12);
+}
+
+/* Accountable-agent surfaces wear the reserved agent accent (BRANDLAB §4). */
+.agent-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.agent-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: var(--agent);
+}
+
+.agent-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space2);
+}
+
 .form,
 .field {
   display: grid;
