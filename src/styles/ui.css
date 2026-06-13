@@ -6,13 +6,21 @@
 }
 
 .brand-mark {
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-sm);
-  color: white;
-  background: var(--primary);
+  flex: none;
+  width: 28px;
+  height: 28px;
+}
+
+.wordmark {
+  font-weight: 800;
+}
+
+.wordmark-desk {
+  color: var(--accent);
+}
+
+.sidebar .wordmark-desk {
+  color: inherit;
 }
 
 .nav-link {
