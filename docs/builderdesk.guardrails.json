@@ -1,0 +1,194 @@
+{
+  "project": "BuilderDesk by ProofForge",
+  "status": "candidate_only",
+  "version": "2026-06-13",
+  "productTruth": "find live funded work -> score source health -> run an accountable agent-assisted pursuit -> package evidence -> create an accepted-work receipt -> improve builder profile",
+  "mandatoryOperatingLoop": [
+    "discovery",
+    "facts",
+    "inference",
+    "decision",
+    "next_step"
+  ],
+  "claimLabels": {
+    "live": "Runs in the app now against a real service, source, or transaction.",
+    "artifact": "Produces a real file, receipt, packet, log, screenshot, or export.",
+    "configured": "Works when keys or accounts are supplied, but is not active in this local run.",
+    "demo": "Fixture data for flow review only.",
+    "roadmap": "Future work. Not claimed as working."
+  },
+  "forbiddenClaims": [
+    "live for fixture data",
+    "payment when only a payout reference is tracked",
+    "verified when no verifier or artifact exists",
+    "integrated when a sponsor SDK is only installed or named",
+    "agent did it when the user manually supplied the output"
+  ],
+  "anchorUser": "Serious ecosystem builder or small studio working across 3-7 funded opportunities.",
+  "anchorFlow": [
+    "source_import",
+    "opportunity_radar",
+    "pursuit_packet",
+    "agent_workroom",
+    "submission_package",
+    "accepted_work_receipt",
+    "profile_update"
+  ],
+  "proofObjects": [
+    "pursuit_packet",
+    "accepted_work_receipt"
+  ],
+  "brandArtifacts": [
+    "builderdesk-brandlab-2026-06-13.md",
+    "builderdesk.brand-tokens.json"
+  ],
+  "brandDirection": "Focused Builder Cockpit",
+  "verifier": "Local verifier checks receipt -> pursuit packet -> evidence bundle -> profile update.",
+  "requiredGates": [
+    "candidate_status",
+    "anchor_user",
+    "anchor_flow",
+    "proof_object",
+    "verifier",
+    "source_quality",
+    "agent_accountability",
+    "sponsor_fit",
+    "ux_quality",
+    "build_discipline"
+  ],
+  "sourceStates": [
+    "live",
+    "stale",
+    "partial",
+    "manual",
+    "fixture",
+    "broken"
+  ],
+  "sourceAdapterRequiredFields": [
+    "source_name",
+    "source_url",
+    "source_type",
+    "opportunity_title",
+    "reward_or_funding_reference",
+    "deadline_or_freshness_timestamp",
+    "owner_or_reviewer_or_maintainer",
+    "acceptance_criteria",
+    "submission_destination",
+    "last_fetched_time",
+    "source_state",
+    "parser_confidence",
+    "raw_source_snapshot",
+    "normalized_opportunity_object"
+  ],
+  "v1SourceTarget": [
+    "github_live_adapter",
+    "manual_url_capture",
+    "one_reliable_live_bounty_grant_or_governance_source"
+  ],
+  "agentRequiredFields": [
+    "name",
+    "owner",
+    "role",
+    "allowed_tools",
+    "denied_tools",
+    "budget_state",
+    "wallet_state",
+    "evidence_output_type",
+    "trace_export",
+    "last_run",
+    "status",
+    "human_release_requirement"
+  ],
+  "agentAutonomyLevels": [
+    "read",
+    "score",
+    "plan",
+    "work",
+    "package",
+    "submit",
+    "spend_pay",
+    "profile_publish"
+  ],
+  "humanReleaseRequiredFor": [
+    "submit",
+    "spend_pay",
+    "profile_publish",
+    "high_impact_evidence"
+  ],
+  "sponsorFitRequiredFields": [
+    "sponsor",
+    "product_need",
+    "sponsor_primitive",
+    "user_visible_moment",
+    "artifact_or_proof",
+    "breakage_test",
+    "claim_label",
+    "showcase_reason"
+  ],
+  "primaryUiMustShow": [
+    "where_am_i",
+    "what_needs_attention",
+    "what_should_i_do_next",
+    "what_is_the_state",
+    "what_changed"
+  ],
+  "primaryUiMustNotShow": [
+    "raw_hashes",
+    "json",
+    "raw_logs",
+    "prompts",
+    "sponsor_labels",
+    "protocol_names",
+    "storage_uris",
+    "internal_implementation_notes"
+  ],
+  "driftTripwires": [
+    "add_marketplace",
+    "support_all_sources_now",
+    "use_all_sponsors",
+    "show_raw_agent_logs_first",
+    "start_with_wallet_connect",
+    "make_agents_the_headline",
+    "add_dashboard_cards_for_everything",
+    "imply_live_payment_without_live_payment",
+    "hide_demo_or_configured_labels",
+    "wire_backend_before_clickable_flow",
+    "add_sponsor_logo_without_visible_primitive",
+    "make_profile_a_social_feed"
+  ],
+  "requiredCorrection": "Return to the anchor flow and ask which single user action this improves.",
+  "buildStages": [
+    "repo_scaffold_readme_guardrails",
+    "design_tokens_app_shell",
+    "static_cockpit_radar_workroom_receipt_mock",
+    "mobile_responsive_pass",
+    "live_github_source_adapter",
+    "manual_url_capture",
+    "second_live_source_adapter",
+    "agent_registry_autonomy_ladder",
+    "workroom_evidence_submission_package",
+    "accepted_work_receipt_profile_update",
+    "sponsor_integration_1",
+    "sponsor_integration_2",
+    "sponsor_integration_3_only_if_load_bearing",
+    "demo_script_screenshots_vercel_deploy"
+  ],
+  "demoMustProve": [
+    "live_source_imported",
+    "source_health_visible",
+    "opportunity_scored",
+    "pursuit_packet_created",
+    "agent_helps_inside_boundaries",
+    "human_releases_submission_or_package",
+    "accepted_work_receipt_created",
+    "profile_improves"
+  ],
+  "demoFailsIfOnlyShows": [
+    "static_dashboard",
+    "bounty_feed",
+    "chat_agent",
+    "proof_page",
+    "wallet_login",
+    "sponsor_logo_collection"
+  ]
+}

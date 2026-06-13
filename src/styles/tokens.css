@@ -1,0 +1,80 @@
+/*
+ * BuilderDesk design tokens.
+ * Generated from docs/builderdesk.brand-tokens.json (2026-06-13).
+ * Source of truth: docs/BRANDLAB.md. If you add or change a token here,
+ * update the JSON and BRANDLAB.md in the same change.
+ */
+
+:root {
+  /* Color */
+  --canvas: #f7f5f0;
+  --surface: #ffffff;
+  --surface-muted: #fbfaf7;
+  --ink: #111827;
+  --ink-soft: #4b5563;
+  --ink-muted: #6b7280;
+  --line: #e5e0d8;
+  --line-strong: #d6d0c6;
+  --primary: #111827;
+  --primary-hover: #020617;
+  --accent: #635bff;
+  --accent-soft: #eeecff;
+  --success: #16875a;
+  --success-soft: #e8f7ef;
+  --warning: #a05a00;
+  --warning-soft: #fff5dc;
+  --danger: #c2413d;
+  --danger-soft: #fff0ef;
+  --proof: #2563eb;
+  --agent: #7c3aed;
+  --receipt: #c77700;
+
+  /* Typography */
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+
+  /* Type scale (desktop defaults; mobile overrides below). size / line-height */
+  --display-size: 48px;
+  --display-line: 56px;
+  --title-size: 32px;
+  --title-line: 40px;
+  --section-size: 20px;
+  --section-line: 28px;
+  --body-size: 15px;
+  --body-line: 22px;
+  --small-size: 13px;
+  --small-line: 18px;
+  --micro-size: 12px;
+  --micro-line: 16px;
+
+  /* Spacing */
+  --space1: 4px;
+  --space2: 8px;
+  --space3: 12px;
+  --space4: 16px;
+  --space5: 24px;
+  --space6: 32px;
+  --space7: 48px;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+
+  /* Elevation */
+  --elevation-row: none;
+  --elevation-command: 0 10px 28px rgba(17, 24, 39, 0.07);
+  --elevation-drawer: 0 18px 48px rgba(17, 24, 39, 0.14);
+}
+
+@media (max-width: 600px) {
+  :root {
+    --display-size: 36px;
+    --display-line: 42px;
+    --title-size: 28px;
+    --title-line: 34px;
+    --section-size: 19px;
+    --section-line: 26px;
+  }
+}

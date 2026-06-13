@@ -1,0 +1,148 @@
+{
+  "project": "BuilderDesk by ProofForge",
+  "status": "brand_source_of_truth_candidate",
+  "version": "2026-06-13",
+  "brandLine": "Work radar for serious builders.",
+  "twoSecondExplanation": "Find funded work. Track the pursuit. Submit proof. Build a stronger profile.",
+  "visualDirection": "Focused Builder Cockpit",
+  "colors": {
+    "canvas": "#F7F5F0",
+    "surface": "#FFFFFF",
+    "surfaceMuted": "#FBFAF7",
+    "ink": "#111827",
+    "inkSoft": "#4B5563",
+    "inkMuted": "#6B7280",
+    "line": "#E5E0D8",
+    "lineStrong": "#D6D0C6",
+    "primary": "#111827",
+    "primaryHover": "#020617",
+    "accent": "#635BFF",
+    "accentSoft": "#EEECFF",
+    "success": "#16875A",
+    "successSoft": "#E8F7EF",
+    "warning": "#A05A00",
+    "warningSoft": "#FFF5DC",
+    "danger": "#C2413D",
+    "dangerSoft": "#FFF0EF",
+    "proof": "#2563EB",
+    "agent": "#7C3AED",
+    "receipt": "#C77700"
+  },
+  "typography": {
+    "fontSans": "Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+    "scale": {
+      "display": {
+        "desktop": "48px/56px",
+        "mobile": "36px/42px",
+        "use": "landing hero only"
+      },
+      "title": {
+        "desktop": "32px/40px",
+        "mobile": "28px/34px",
+        "use": "major app screens"
+      },
+      "section": {
+        "desktop": "20px/28px",
+        "mobile": "19px/26px",
+        "use": "section heading"
+      },
+      "body": {
+        "desktop": "15px/22px",
+        "mobile": "15px/22px",
+        "use": "primary UI copy"
+      },
+      "small": {
+        "desktop": "13px/18px",
+        "mobile": "13px/18px",
+        "use": "metadata and helper copy"
+      },
+      "micro": {
+        "desktop": "12px/16px",
+        "mobile": "12px/16px",
+        "use": "badges and table labels"
+      }
+    }
+  },
+  "spacing": {
+    "space1": "4px",
+    "space2": "8px",
+    "space3": "12px",
+    "space4": "16px",
+    "space5": "24px",
+    "space6": "32px",
+    "space7": "48px"
+  },
+  "radius": {
+    "radiusSm": "8px",
+    "radiusMd": "12px",
+    "radiusLg": "18px",
+    "radiusXl": "24px"
+  },
+  "elevation": {
+    "row": "border only",
+    "commandRow": "0 10px 28px rgba(17, 24, 39, 0.07)",
+    "drawer": "0 18px 48px rgba(17, 24, 39, 0.14)"
+  },
+  "markConcepts": [
+    {
+      "id": "desk_check",
+      "label": "Desk Check",
+      "meaning": "organized work surface plus accepted evidence"
+    },
+    {
+      "id": "radar_desk",
+      "label": "Radar Desk",
+      "meaning": "source discovery and ranked opportunity scanning"
+    },
+    {
+      "id": "proof_arrow",
+      "label": "Proof Arrow",
+      "meaning": "work moving from pursuit to accepted outcome"
+    }
+  ],
+  "componentContracts": [
+    "Button",
+    "Field",
+    "StatusBadge",
+    "CommandRow",
+    "WorkRow",
+    "Drawer",
+    "Stepper",
+    "EmptyState",
+    "ProofDisclosure",
+    "OpportunityRow",
+    "SourceHealthRow",
+    "PursuitPacketCard",
+    "AgentBoundaryPanel",
+    "SubmissionPackagePanel",
+    "AcceptedReceiptPanel",
+    "BuilderProfileProofRow"
+  ],
+  "brandLabRoutes": [
+    "/brand-lab",
+    "/brand-lab/radar",
+    "/brand-lab/workroom",
+    "/brand-lab/receipt",
+    "/brandlab"
+  ],
+  "brandLabFragments": [
+    "identity",
+    "tokens",
+    "components",
+    "flow-mocks",
+    "agent-ux",
+    "states",
+    "mobile"
+  ],
+  "forbiddenVisualPatterns": [
+    "card_grid_dashboard",
+    "wallet_first_onboarding",
+    "sponsor_logo_wall",
+    "chat_first_agent_console",
+    "raw_protocol_primary_ui",
+    "purple_blue_gradient_default",
+    "glassmorphism_default",
+    "mascot_first_branding",
+    "crypto_terminal_aesthetic"
+  ]
+}
