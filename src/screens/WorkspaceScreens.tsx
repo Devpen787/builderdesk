@@ -39,7 +39,7 @@ export function Home({ state }: { state: State }) {
 }
 
 export function Sources({ state, setState }: { state: State; setState: SetState }) {
-  const [url, setUrl] = useState('https://github.com/vercel/next.js/issues/72923')
+  const [url, setUrl] = useState('https://github.com/microsoft/TypeScript/issues/9998')
   const [loading, setLoading] = useState(false)
 
   async function submit(event: FormEvent) {
