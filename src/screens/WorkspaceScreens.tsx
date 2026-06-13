@@ -14,6 +14,8 @@ import { importGitHubOpportunity } from '../domain/github'
 import { scoreOpportunity } from '../domain/scoring'
 import type { AgentTrace } from '../domain/types'
 import { identityLabel } from '../domain/ens'
+import { fetchOpportunityInsight } from '../domain/enrich'
+import type { Insight } from '../domain/enrich'
 import { useBuilderAuth } from '../auth/privy'
 import { useAppState } from '../store'
 import { navigate } from '../router'
@@ -111,8 +113,10 @@ export function Radar({ state, setState }: { state: State; setState: SetState })
 
 export function Pursuit({ state, id, setState }: { state: State; id: string; setState: SetState }) {
   const packet = state.packets.find((item) => item.id === id)
+  const opportunity = state.opportunities.find((item) => item.id === packet?.opportunityId)
+  const [insight, setInsight] = useState<Insight | null>(null)
+  const [loadingInsight, setLoadingInsight] = useState(false)
   if (!packet) return <EmptyState title="Pursuit not found" body="Open the radar and create a packet from a live source." />
-  const opportunity = state.opportunities.find((item) => item.id === packet.opportunityId)
 
   function openWorkroom() {
     if (!opportunity) return
@@ -125,6 +129,13 @@ export function Pursuit({ state, id, setState }: { state: State; id: string; set
     navigate(`/pursuits/${packet!.id}/workroom`)
   }
 
+  async function getInsight() {
+    if (!opportunity) return
+    setLoadingInsight(true)
+    setInsight(await fetchOpportunityInsight(opportunity))
+    setLoadingInsight(false)
+  }
+
   return (
     <>
       <PageHeader eyebrow="Pursuit packet" title={packet.userProblem} action={<Button variant="primary" onClick={openWorkroom}>Open workroom</Button>}><p>{packet.scope}</p></PageHeader>
@@ -132,6 +143,21 @@ export function Pursuit({ state, id, setState }: { state: State; id: string; set
         <Panel><h3>Acceptance criteria</h3><List items={packet.acceptanceCriteria} /></Panel>
         <Panel><h3>Risks</h3><List items={packet.risks} /></Panel>
       </div>
+      <Panel className="insight-panel">
+        <h3>Google Cloud insight</h3>
+        {insight ? (
+          insight.configured && insight.insight ? (
+            <><Badge label="Live · Google Cloud" tone="good" /><p style={{ marginTop: 12 }}>{insight.insight}</p></>
+          ) : (
+            <><Badge label="Configured only" tone="warn" /><p style={{ marginTop: 12 }}>{insight.note}</p></>
+          )
+        ) : (
+          <>
+            <p>Ask Google Cloud (Gemini) for a plain-language qualification read on this source.</p>
+            <Button onClick={getInsight} disabled={loadingInsight}>{loadingInsight ? 'Asking Google Cloud…' : 'Get qualification insight'}</Button>
+          </>
+        )}
+      </Panel>
     </>
   )
 }

@@ -162,6 +162,14 @@
   gap: var(--space2);
 }
 
+.insight-panel {
+  margin-top: var(--space5);
+}
+
+.insight-panel .button {
+  margin-top: var(--space3);
+}
+
 .eyebrow,
 .badge,
 .flow-pill {
