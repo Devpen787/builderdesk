@@ -1,0 +1,275 @@
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  color: white;
+  background: var(--bd-primary);
+}
+
+.nav-link {
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 14px;
+  text-align: left;
+  color: rgba(255, 255, 255, 0.72);
+  background: transparent;
+}
+
+.nav-link.active,
+.nav-link:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  gap: 8px;
+  padding: 0 18px;
+  border-radius: 12px;
+  border: 1px solid var(--bd-line);
+  background: var(--bd-surface);
+  color: var(--bd-ink);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.button.primary {
+  color: white;
+  border-color: var(--bd-primary);
+  background: var(--bd-primary);
+}
+
+.button.primary:hover {
+  background: var(--bd-primary-hover);
+}
+
+.button.accent {
+  color: white;
+  border-color: var(--bd-accent);
+  background: var(--bd-accent);
+}
+
+.panel {
+  border: 1px solid var(--bd-line);
+  border-radius: var(--bd-radius-lg);
+  background: rgba(255, 253, 249, 0.86);
+  box-shadow: var(--bd-shadow);
+}
+
+.panel-pad {
+  padding: 24px;
+}
+
+.ticket-visual {
+  min-height: 340px;
+  padding: 24px;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(247, 201, 72, 0.25), transparent 42%), var(--bd-surface);
+}
+
+.ticket {
+  margin: 32px auto 0;
+  padding: 26px;
+  max-width: 320px;
+  border: 1px solid #ddb33f;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #ffe58b, #ffd05f);
+  box-shadow: 0 20px 40px rgba(132, 92, 0, 0.16);
+}
+
+.ticket-number {
+  font-size: 52px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+}
+
+.eyebrow,
+.badge,
+.flow-pill {
+  display: inline-flex;
+  align-items: center;
+  width: max-content;
+  font-weight: 850;
+}
+
+.eyebrow {
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: #332300;
+  background: var(--bd-gold-soft);
+  font-size: 13px;
+}
+
+.badge {
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.badge.good {
+  color: var(--bd-green);
+  background: var(--bd-green-soft);
+}
+
+.badge.warn {
+  color: var(--bd-amber);
+  background: var(--bd-amber-soft);
+}
+
+.badge.bad {
+  color: var(--bd-red);
+  background: var(--bd-red-soft);
+}
+
+.badge.info {
+  color: var(--bd-accent);
+  background: var(--bd-accent-soft);
+}
+
+.row-list {
+  display: grid;
+  border: 1px solid var(--bd-line);
+  border-radius: var(--bd-radius-lg);
+  overflow: hidden;
+  background: var(--bd-surface);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 20px;
+  align-items: center;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--bd-line);
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.row-title {
+  font-weight: 850;
+  letter-spacing: -0.02em;
+}
+
+.row-meta {
+  margin-top: 4px;
+  color: var(--bd-muted);
+  font-size: 14px;
+}
+
+.form,
+.field {
+  display: grid;
+  gap: 16px;
+}
+
+.field {
+  gap: 7px;
+}
+
+.field label {
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  border: 1px solid var(--bd-line-strong);
+  border-radius: 12px;
+  padding: 12px 13px;
+  background: white;
+  color: var(--bd-ink);
+}
+
+.textarea {
+  min-height: 92px;
+  resize: vertical;
+}
+
+.input:focus,
+.textarea:focus,
+.button:focus-visible,
+.nav-link:focus-visible {
+  outline: 3px solid rgba(92, 71, 232, 0.24);
+  outline-offset: 2px;
+}
+
+.stat {
+  padding: 16px;
+  border: 1px solid var(--bd-line);
+  border-radius: 16px;
+  background: var(--bd-surface-soft);
+}
+
+.stat strong {
+  display: block;
+  font-size: 26px;
+  line-height: 1.1;
+}
+
+.empty {
+  padding: 36px;
+  text-align: left;
+}
+
+.flow-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.flow-pill {
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: var(--bd-blue-soft);
+  color: #23355c;
+  font-size: 13px;
+}
+
+details {
+  border: 1px solid var(--bd-line);
+  border-radius: 14px;
+  padding: 14px 16px;
+  background: var(--bd-surface-soft);
+}
+
+summary {
+  cursor: pointer;
+  font-weight: 850;
+}
+
+@media (max-width: 860px) {
+  .nav-link {
+    text-align: center;
+    padding: 10px 8px;
+    font-size: 13px;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .button {
+    padding-inline: 14px;
+  }
+}
