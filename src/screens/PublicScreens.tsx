@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { defaultProfile, useAppState } from '../store'
 import { navigate } from '../router'
-import { Button, Field, PageHeader, Panel, PublicShell } from '../components'
+import { Button, Field, PageHeader, PublicShell } from '../components'
 
 export function Landing() {
   return (
@@ -34,39 +34,6 @@ export function Landing() {
           </div>
         </div>
       </section>
-    </PublicShell>
-  )
-}
-
-export function BrandLab() {
-  return (
-    <PublicShell>
-      <main className="main">
-        <PageHeader eyebrow="Fresh design system" title="BuilderDesk brand lab">
-          <p>Focused Builder Cockpit: calm rows, warm surfaces, one clear action, no sponsor wall, no chat-first maze.</p>
-        </PageHeader>
-        <div className="two-col">
-          <Panel>
-            <h3>Voice</h3>
-            <p>Plain, operational, accountable. The user should know what source was imported, what is ready, and what still needs human release.</p>
-            <div className="stat-strip">
-              <div className="stat"><strong>1</strong><p>primary action per screen</p></div>
-              <div className="stat"><strong>5</strong><p>claim labels</p></div>
-              <div className="stat"><strong>0</strong><p>copied ProofForge assets</p></div>
-            </div>
-          </Panel>
-          <Panel>
-            <h3>Tokens</h3>
-            <p>Warm off-white background, near-black actions, restrained purple accent, green for verified states, amber for friction.</p>
-            <div className="flow-line">
-              <span className="badge info">Live</span>
-              <span className="badge good">Accepted</span>
-              <span className="badge warn">Needs check</span>
-              <span className="badge bad">Broken</span>
-            </div>
-          </Panel>
-        </div>
-      </main>
     </PublicShell>
   )
 }

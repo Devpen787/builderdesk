@@ -1,0 +1,188 @@
+.row-list {
+  display: grid;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space5);
+  align-items: center;
+  padding: var(--space4) var(--space5);
+  border-bottom: 1px solid var(--line);
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.row-title {
+  font-weight: 800;
+}
+
+.row-meta {
+  margin-top: var(--space1);
+  color: var(--ink-muted);
+  font-size: var(--small-size);
+  line-height: var(--small-line);
+  font-variant-numeric: tabular-nums;
+}
+
+/* WorkRow / OpportunityRow / SourceHealthRow (BRANDLAB §8 product components) */
+.work-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--space5);
+  align-items: start;
+  padding: var(--space5);
+  border-bottom: 1px solid var(--line);
+}
+
+.work-row:last-child {
+  border-bottom: 0;
+}
+
+.source-health-row {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.work-row-main {
+  min-width: 0;
+}
+
+.work-row-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space3);
+  flex-wrap: wrap;
+}
+
+.work-row-title {
+  font-weight: 800;
+  font-size: var(--section-size);
+  line-height: var(--section-line);
+}
+
+.work-row-summary {
+  margin: var(--space2) 0 0;
+  color: var(--ink-soft);
+  font-size: var(--small-size);
+  line-height: var(--small-line);
+}
+
+.source-health-note {
+  margin: var(--space3) 0 0;
+  color: var(--ink-muted);
+  font-size: var(--small-size);
+}
+
+.work-row-aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space3);
+}
+
+.meta-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space2);
+  margin-top: var(--space3);
+}
+
+.meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  padding: var(--space1) var(--space3);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-muted);
+  font-size: var(--micro-size);
+}
+
+.meta-chip-label {
+  flex: none;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 800;
+}
+
+.meta-chip-value {
+  overflow: hidden;
+  color: var(--ink);
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reason-list {
+  margin: 0;
+  padding-left: var(--space4);
+}
+
+.reason-list li {
+  color: var(--ink-soft);
+  font-size: var(--small-size);
+  line-height: var(--small-line);
+}
+
+.score-meter {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 60px;
+  height: 60px;
+}
+
+.score-track {
+  stroke: var(--line);
+}
+
+.score-arc {
+  stroke: var(--ink-muted);
+  transition: stroke-dashoffset 220ms ease;
+}
+
+.tone-good .score-arc {
+  stroke: var(--success);
+}
+
+.tone-info .score-arc {
+  stroke: var(--accent);
+}
+
+.tone-warn .score-arc {
+  stroke: var(--warning);
+}
+
+.tone-bad .score-arc {
+  stroke: var(--danger);
+}
+
+.score-meter-value {
+  position: absolute;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+@media (max-width: 860px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+
+  .work-row {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .work-row-aside {
+    grid-column: 1 / -1;
+    align-items: stretch;
+  }
+}

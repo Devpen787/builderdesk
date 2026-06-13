@@ -2,7 +2,7 @@ import { reasonCopy, scoreBandCopy, sourceStateCopy } from '../domain/status'
 import type { OpportunitySnapshot, QualificationScorecard } from '../domain/types'
 import { Badge, Button, ProofDisclosure } from '../components'
 
-function ScoreMeter({ score, tone }: { score: number; tone: string }) {
+export function ScoreMeter({ score, tone }: { score: number; tone: string }) {
   const radius = 22
   const circumference = 2 * Math.PI * radius
   const clamped = Math.max(0, Math.min(100, Math.round(score)))

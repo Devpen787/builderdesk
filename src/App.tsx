@@ -1,6 +1,7 @@
 import { OrganizerShell } from './components'
 import { routeParam, usePath } from './router'
-import { BrandLab, Landing, Onboarding } from './screens/PublicScreens'
+import { BrandLab } from './screens/BrandLab'
+import { Landing, Onboarding } from './screens/PublicScreens'
 import {
   Home,
   Profile,

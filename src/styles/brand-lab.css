@@ -1,0 +1,128 @@
+.lab-banner {
+  margin-bottom: var(--space5);
+  padding: var(--space2) var(--space4);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface-muted);
+  color: var(--ink-muted);
+  font-size: var(--small-size);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.lab-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space2);
+  margin-bottom: var(--space6);
+}
+
+.lab-nav .flow-pill {
+  text-decoration: none;
+}
+
+.lab-section {
+  margin-top: var(--space7);
+  scroll-margin-top: var(--space5);
+}
+
+.lab-section-title {
+  margin-bottom: var(--space4);
+  font-size: var(--section-size);
+  line-height: var(--section-line);
+}
+
+.lab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space4);
+  align-items: start;
+}
+
+.lab-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space3);
+  margin-top: var(--space3);
+}
+
+.mark-demo {
+  display: flex;
+  gap: var(--space3);
+  margin: var(--space3) 0;
+}
+
+.mark-tile {
+  display: grid;
+  place-items: center;
+  width: 88px;
+  height: 88px;
+  border-radius: var(--radius-md);
+}
+
+.mark-tile .brand-mark {
+  width: 44px;
+  height: 44px;
+}
+
+.mark-tile.light {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.mark-tile.dark {
+  background: var(--ink);
+  color: white;
+}
+
+.wordmark-demo {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space3);
+  margin: var(--space4) 0;
+  font-size: var(--title-size);
+}
+
+.endorse {
+  color: var(--ink-muted);
+  font-size: var(--small-size);
+  font-weight: 700;
+}
+
+.swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--space3);
+  margin-top: var(--space3);
+}
+
+.swatch {
+  display: grid;
+  gap: 2px;
+}
+
+.swatch-chip {
+  height: 48px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+
+.swatch-name {
+  font-size: var(--small-size);
+  font-weight: 800;
+}
+
+.swatch-token {
+  color: var(--ink-muted);
+  font-size: var(--micro-size);
+  font-variant-numeric: tabular-nums;
+}
+
+.type-scale {
+  display: grid;
+  gap: var(--space3);
+  margin-top: var(--space3);
+}

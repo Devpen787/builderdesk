@@ -15,7 +15,7 @@ export function Brand() {
 
 // Desk surface + accepted-proof check (BRANDLAB §7). Uses currentColor so it
 // reads on both the light top bar and the dark side rail. Legible at 24px.
-function BrandMark() {
+export function BrandMark() {
   return (
     <svg className="brand-mark" width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="1.8" />
