@@ -1,0 +1,174 @@
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 440px;
+  gap: var(--space7);
+  align-items: center;
+  width: min(100% - 32px, 1160px);
+  margin: 56px auto 0;
+}
+
+.hero-copy .actions {
+  margin-top: var(--space5);
+}
+
+.cap-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space2);
+  margin-top: var(--space5);
+}
+
+/* Hero product preview — a framed snapshot of the real cockpit. */
+.preview-card {
+  padding: var(--space4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  box-shadow: 0 30px 70px rgba(17, 24, 39, 0.12);
+}
+
+.preview-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: var(--space3);
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-muted);
+  font-size: var(--micro-size);
+  font-weight: 800;
+}
+
+.preview-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: var(--line-strong);
+}
+
+.preview-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--space3);
+  align-items: center;
+  padding: var(--space4) 0;
+}
+
+.preview-title {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.preview-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space2);
+  margin-top: var(--space2);
+}
+
+.preview-receipt {
+  margin-top: var(--space2);
+  padding: var(--space4);
+  border: 1px solid var(--receipt);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, #ffe9b0, #ffd97a);
+}
+
+.preview-receipt p {
+  margin: 0;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.preview-receipt .ticket-number {
+  font-size: 40px;
+}
+
+/* Content bands */
+.band {
+  width: min(100% - 32px, 1160px);
+  margin: 0 auto;
+  padding: var(--space7) 0;
+}
+
+.band > h2 {
+  margin-bottom: var(--space5);
+}
+
+.loop-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space3);
+}
+
+.loop-step {
+  padding: var(--space4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.loop-num {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 800;
+  font-size: var(--small-size);
+}
+
+.loop-title {
+  margin: var(--space3) 0 var(--space1);
+  font-weight: 800;
+}
+
+.loop-step p {
+  margin: 0;
+  font-size: var(--small-size);
+  line-height: var(--small-line);
+}
+
+.surface-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space4);
+}
+
+.surface-card {
+  position: relative;
+  overflow: hidden;
+  padding: var(--space5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.surface-card h3 {
+  margin: var(--space3) 0 var(--space2);
+}
+
+.surface-card p {
+  margin: 0;
+}
+
+.band-cta {
+  margin-top: var(--space6);
+}
+
+@media (max-width: 860px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: var(--space6);
+    margin-top: var(--space6);
+  }
+
+  .loop-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .surface-grid {
+    grid-template-columns: 1fr;
+  }
+}
