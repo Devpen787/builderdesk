@@ -10,7 +10,7 @@ import {
   verifyReceipt,
 } from '../domain/artifacts'
 import { upsert } from '../domain/collection'
-import { importGitHubOpportunity } from '../domain/github'
+import { importGitHubOpportunity, searchGitHubOpportunities } from '../domain/github'
 import { scoreOpportunity } from '../domain/scoring'
 import type { AgentTrace } from '../domain/types'
 import { identityLabel } from '../domain/ens'
@@ -42,9 +42,29 @@ export function Home({ state }: { state: State }) {
   )
 }
 
+const searchPresets = ['good first issue', 'help wanted', 'bounty', 'documentation']
+
 export function Sources({ state, setState }: { state: State; setState: SetState }) {
+  const [query, setQuery] = useState('good first issue')
   const [url, setUrl] = useState('https://github.com/microsoft/TypeScript/issues/9998')
   const [loading, setLoading] = useState(false)
+  const [searching, setSearching] = useState(false)
+
+  async function runSearch(term: string) {
+    if (!term.trim()) return
+    setSearching(true)
+    const results = await searchGitHubOpportunities(term, import.meta.env.VITE_GITHUB_TOKEN)
+    setState((current) => {
+      let opportunities = current.opportunities
+      let scorecards = current.scorecards
+      for (const opportunity of results) {
+        opportunities = upsert(opportunities, opportunity, 'id')
+        scorecards = upsert(scorecards, scoreOpportunity(opportunity), 'opportunityId')
+      }
+      return { ...current, opportunities, scorecards }
+    })
+    setSearching(false)
+  }
 
   async function submit(event: FormEvent) {
     event.preventDefault()
@@ -61,12 +81,21 @@ export function Sources({ state, setState }: { state: State; setState: SetState 
 
   return (
     <>
-      <PageHeader eyebrow="Live source import" title="Connect work sources">
-        <p>Paste a public GitHub issue or pull request. BuilderDesk imports it live and labels the source health.</p>
+      <PageHeader eyebrow="Live source import" title="Find live work">
+        <p>Search open GitHub issues by label, keyword, or owner/repo and import many at once. Each is scored live.</p>
       </PageHeader>
-      <form className="panel panel-pad form" onSubmit={submit}>
-        <Field label="GitHub issue or pull request URL" value={url} onChange={setUrl} required />
-        <Button type="submit" variant="primary" disabled={loading}>{loading ? 'Importing live source...' : 'Import source'}</Button>
+      <form className="panel panel-pad form" onSubmit={(event) => { event.preventDefault(); runSearch(query) }}>
+        <Field label="Search GitHub work" value={query} onChange={setQuery} placeholder="good first issue, a label, or owner/repo" />
+        <div className="preset-row">
+          {searchPresets.map((preset) => (
+            <button type="button" key={preset} className="preset" onClick={() => { setQuery(preset); runSearch(preset) }}>{preset}</button>
+          ))}
+        </div>
+        <Button type="submit" variant="primary" disabled={searching}>{searching ? 'Searching live work…' : 'Search live work'}</Button>
+      </form>
+      <form className="panel panel-pad form source-secondary" onSubmit={submit}>
+        <Field label="Or import a single issue / pull request URL" value={url} onChange={setUrl} required />
+        <Button type="submit" disabled={loading}>{loading ? 'Importing live source…' : 'Import source'}</Button>
       </form>
       <SourceRows state={state} />
     </>

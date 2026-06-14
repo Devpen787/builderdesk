@@ -172,6 +172,33 @@
   font-weight: 800;
 }
 
+.preset-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space2);
+}
+
+.preset {
+  padding: var(--space2) var(--space3);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-muted);
+  color: var(--ink);
+  font-size: var(--small-size);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.preset:hover {
+  border-color: var(--line-strong);
+}
+
+.source-secondary {
+  margin-top: var(--space4);
+  background: var(--surface-muted);
+  box-shadow: none;
+}
+
 @media (max-width: 860px) {
   .row {
     grid-template-columns: 1fr;

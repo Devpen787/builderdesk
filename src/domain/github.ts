@@ -65,6 +65,44 @@ export async function importGitHubOpportunity(
   }
 }
 
+// Live GitHub issue search -> many opportunities at once, so the radar is
+// populated with real open work instead of a single pasted URL.
+export async function searchGitHubOpportunities(
+  query: string,
+  token?: string,
+  fetcher: typeof fetch = fetch,
+): Promise<OpportunitySnapshot[]> {
+  const q = buildSearchQuery(query)
+  if (!q) return []
+  try {
+    const headers: Record<string, string> = { Accept: 'application/vnd.github+json' }
+    if (token) headers.Authorization = `Bearer ${token}`
+    const response = await fetcher(
+      `https://api.github.com/search/issues?q=${encodeURIComponent(q)}&per_page=20&sort=updated&order=desc`,
+      { headers },
+    )
+    if (!response.ok) return []
+    const payload = (await response.json()) as { items?: GitHubIssueResponse[] }
+    const snapshots: OpportunitySnapshot[] = []
+    for (const item of payload.items ?? []) {
+      const target = item.html_url ? parseGitHubUrl(item.html_url) : null
+      if (target) snapshots.push(normalizeGitHubIssue(target, item))
+    }
+    return snapshots
+  } catch {
+    return []
+  }
+}
+
+function buildSearchQuery(query: string): string {
+  const trimmed = query.trim()
+  if (!trimmed) return ''
+  const base = 'is:issue is:open'
+  if (/^[\w.-]+\/[\w.-]+$/.test(trimmed)) return `repo:${trimmed} ${base}`
+  if (trimmed.includes(':')) return `${trimmed} is:open`
+  return `label:"${trimmed}" ${base}`
+}
+
 export function normalizeGitHubIssue(
   target: GitHubTarget,
   payload: GitHubIssueResponse,
