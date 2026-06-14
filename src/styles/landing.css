@@ -11,14 +11,13 @@
   margin-top: var(--space5);
 }
 
-.cap-strip {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space2);
-  margin-top: var(--space5);
+.cap-line {
+  margin-top: var(--space4);
+  color: var(--ink-muted);
+  font-size: var(--small-size);
 }
 
-/* Hero product preview — a framed snapshot of the real cockpit. */
+/* Hero product preview — a framed snapshot of a populated radar. */
 .preview-card {
   padding: var(--space4);
   border: 1px solid var(--line);
@@ -53,6 +52,10 @@
   padding: var(--space4) 0;
 }
 
+.preview-row + .preview-row {
+  border-top: 1px solid var(--line);
+}
+
 .preview-title {
   font-weight: 800;
   letter-spacing: -0.01em;
@@ -63,24 +66,6 @@
   flex-wrap: wrap;
   gap: var(--space2);
   margin-top: var(--space2);
-}
-
-.preview-receipt {
-  margin-top: var(--space2);
-  padding: var(--space4);
-  border: 1px solid var(--receipt);
-  border-radius: var(--radius-lg);
-  background: linear-gradient(180deg, #ffe9b0, #ffd97a);
-}
-
-.preview-receipt p {
-  margin: 0;
-  color: var(--ink);
-  font-weight: 700;
-}
-
-.preview-receipt .ticket-number {
-  font-size: 40px;
 }
 
 /* Content bands */
@@ -130,26 +115,17 @@
   line-height: var(--small-line);
 }
 
-.surface-grid {
+.benefits {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--space4);
+  gap: var(--space5);
 }
 
-.surface-card {
-  position: relative;
-  overflow: hidden;
-  padding: var(--space5);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
+.benefit h3 {
+  margin-bottom: var(--space2);
 }
 
-.surface-card h3 {
-  margin: var(--space3) 0 var(--space2);
-}
-
-.surface-card p {
+.benefit p {
   margin: 0;
 }
 
@@ -168,7 +144,7 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .surface-grid {
+  .benefits {
     grid-template-columns: 1fr;
   }
 }

@@ -2,20 +2,25 @@ import { Badge, Button, PublicShell } from '../components'
 import { ScoreMeter } from '../ui/product'
 import { navigate } from '../router'
 
-const loop: Array<[string, string]> = [
-  ['Import', 'Pull a live GitHub issue or pull request into one place.'],
-  ['Score', 'Rank it by source health, clarity, reward, and recency.'],
-  ['Pursue', 'Turn the best one into a focused pursuit packet.'],
-  ['Package', 'Bounded agent help, assembled behind human release.'],
-  ['Receipt', 'Accepted work becomes a verifiable receipt.'],
-  ['Profile', 'Proof compounds into a stronger builder profile.'],
+const previewRows: Array<{ score: number; tone: string; band: string; title: string; reward: string }> = [
+  { score: 87, tone: 'good', band: 'Pursue', title: 'Trade-offs in Control Flow Analysis', reward: '$1,500' },
+  { score: 64, tone: 'info', band: 'Watch', title: 'Add docs for the plugin API', reward: 'Grant' },
+  { score: 41, tone: 'warn', band: 'Risky', title: 'Flaky CI on Windows runners', reward: 'Not listed' },
 ]
 
-const capabilities: Array<[string, string]> = [
-  ['Live GitHub import · Live', 'good'],
-  ['ENS identity · Live', 'good'],
-  ['Privy wallet · Configured', 'warn'],
-  ['Google Cloud insight · Configured', 'warn'],
+const loop: Array<[string, string]> = [
+  ['Import', 'Search live GitHub issues into one place.'],
+  ['Score', 'Rank by source health, clarity, reward, recency.'],
+  ['Pursue', 'Turn the best one into a pursuit packet.'],
+  ['Package', 'Bounded agent help, behind human release.'],
+  ['Receipt', 'Accepted work becomes a verifiable receipt.'],
+  ['Profile', 'Proof compounds into a stronger profile.'],
+]
+
+const benefits: Array<[string, string]> = [
+  ['Find funded work', 'Search live GitHub issues by label or repo and rank them by source health, clarity, reward, and recency.'],
+  ['Stay accountable', 'Agents help inside visible boundaries — and nothing ships without your human release.'],
+  ['Build reusable proof', 'Accepted work becomes a verifiable receipt that compounds on your builder profile.'],
 ]
 
 export function Landing() {
@@ -30,32 +35,25 @@ export function Landing() {
           </p>
           <div className="actions">
             <Button variant="primary" onClick={() => navigate('/onboarding')}>Build my work radar</Button>
-            <Button onClick={() => navigate('/brand-lab')}>Open brand lab</Button>
           </div>
-          <div className="cap-strip">
-            {capabilities.map(([label, tone]) => <Badge key={label} label={label} tone={tone} />)}
-          </div>
+          <p className="cap-line">Live: GitHub import · ENS identity &nbsp;·&nbsp; Configured: Privy wallet · Google Cloud insight</p>
         </div>
 
         <div className="hero-preview" aria-hidden="true">
           <div className="preview-card">
             <div className="preview-head"><span className="preview-dot" /><span className="preview-dot" /><span className="preview-dot" /> builderdesk · radar</div>
-            <div className="preview-row">
-              <ScoreMeter score={87} tone="good" />
-              <div className="preview-main">
-                <div className="preview-title">Trade-offs in Control Flow Analysis</div>
-                <div className="preview-chips">
-                  <span className="meta-chip"><span className="meta-chip-label">Reward</span><span className="meta-chip-value">$1,500</span></span>
-                  <span className="meta-chip"><span className="meta-chip-label">State</span><span className="meta-chip-value">open</span></span>
+            {previewRows.map((row) => (
+              <div className="preview-row" key={row.title}>
+                <ScoreMeter score={row.score} tone={row.tone} />
+                <div className="preview-main">
+                  <div className="preview-title">{row.title}</div>
+                  <div className="preview-chips">
+                    <span className="meta-chip"><span className="meta-chip-label">Reward</span><span className="meta-chip-value">{row.reward}</span></span>
+                  </div>
                 </div>
+                <Badge label={row.band} tone={row.tone} />
               </div>
-              <Badge label="Pursue" tone="good" />
-            </div>
-            <div className="preview-receipt">
-              <span className="eyebrow">Accepted-work receipt</span>
-              <div className="ticket-number tnum">#BD1</div>
-              <p>Human released · Locally verified</p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -74,23 +72,13 @@ export function Landing() {
       </section>
 
       <section className="band">
-        <h2>Built like a cockpit, not a feed.</h2>
-        <div className="surface-grid">
-          <div className="surface-card">
-            <Badge label="Opportunity radar" tone="info" />
-            <h3>Decide at a glance</h3>
-            <p>Ranked rows with a live score, source health, and reward signals — so you know what's worth pursuing.</p>
-          </div>
-          <div className="surface-card agent-panel">
-            <Badge label="Accountable agent" tone="agent" />
-            <h3>Bounded help</h3>
-            <p>Every agent shows allowed and blocked actions, and nothing ships without human release.</p>
-          </div>
-          <div className="surface-card receipt-card">
-            <Badge label="Accepted-work receipt" tone="warn" />
-            <h3>Reusable proof</h3>
-            <p>Accepted work becomes a verifiable receipt that compounds on your builder profile.</p>
-          </div>
+        <div className="benefits">
+          {benefits.map(([title, body]) => (
+            <div className="benefit" key={title}>
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </div>
+          ))}
         </div>
         <div className="band-cta">
           <Button variant="primary" onClick={() => navigate('/onboarding')}>Build my work radar</Button>
