@@ -14,8 +14,13 @@ export type ScoreReason =
   | 'closed-work'
   | 'clear-scope'
   | 'weak-scope'
+  | 'paid-bounty'
   | 'reward-signal'
   | 'no-reward-signal'
+  | 'assigned'
+  | 'open-to-claim'
+  | 'high-competition'
+  | 'low-competition'
   | 'fresh-activity'
   | 'stale-activity'
   | 'has-labels'
@@ -56,6 +61,9 @@ export type OpportunitySnapshot = {
   deadlineSignal: string
   sourceHealthNote: string
   lastActivityAt?: string
+  rewardAmountUsd?: number
+  assigned?: boolean
+  comments?: number
 }
 
 export type QualificationScorecard = {

@@ -31,11 +31,31 @@ export function scoreOpportunity(opportunity: OpportunitySnapshot): Qualificatio
     reasons.push('weak-scope')
   }
 
-  if (opportunity.rewardSignal !== 'Not listed') {
+  if (opportunity.rewardAmountUsd && opportunity.rewardAmountUsd > 0) {
+    score += 16
+    reasons.push('paid-bounty')
+  } else if (opportunity.rewardSignal !== 'Not listed') {
     score += 8
     reasons.push('reward-signal')
   } else {
     reasons.push('no-reward-signal')
+  }
+
+  // Winnability filters (ProofForge: most leads die on assignment/competition).
+  if (opportunity.assigned) {
+    score -= 30
+    reasons.push('assigned')
+  } else {
+    score += 6
+    reasons.push('open-to-claim')
+  }
+
+  if ((opportunity.comments ?? 0) > 10) {
+    score -= 8
+    reasons.push('high-competition')
+  } else {
+    score += 4
+    reasons.push('low-competition')
   }
 
   if (opportunity.labels.length > 0) {

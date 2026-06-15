@@ -1,0 +1,20 @@
+import { chromium } from 'playwright'
+
+const baseUrl = process.env.BUILDERDESK_URL ?? 'http://127.0.0.1:5291'
+const browser = await chromium.launch()
+const page = await browser.newPage({ viewport: { width: 1280, height: 900 } })
+page.setDefaultTimeout(45_000)
+await page.goto(baseUrl)
+await page.evaluate(() => localStorage.clear())
+await page.goto(`${baseUrl}/onboarding`, { waitUntil: 'networkidle' })
+await page.getByRole('button', { name: /continue/i }).click()
+await page.waitForURL('**/app')
+await page.goto(`${baseUrl}/sources`, { waitUntil: 'networkidle' })
+await page.getByRole('button', { name: /find paid bounties/i }).click()
+await page.waitForSelector('.row-list .work-row')
+await page.goto(`${baseUrl}/radar`, { waitUntil: 'networkidle' })
+await page.waitForSelector('.row-list .work-row')
+const count = await page.locator('.row-list .work-row').count()
+await page.screenshot({ path: 'qa/tour/radar-bounties.png', fullPage: true })
+console.log(`bounty rows on radar: ${count}`)
+await browser.close()

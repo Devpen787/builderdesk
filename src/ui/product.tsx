@@ -55,7 +55,9 @@ export function OpportunityRow({
       <div className="work-row-main">
         <div className="work-row-head">
           <span className="work-row-title">{opportunity.title}</span>
+          {opportunity.rewardAmountUsd ? <Badge label={`$${opportunity.rewardAmountUsd.toLocaleString()}`} tone="good" /> : null}
           <Badge label={band.label} tone={band.tone} />
+          {opportunity.assigned ? <Badge label="Assigned" tone="warn" /> : null}
         </div>
         <p className="work-row-summary">{scorecard.summary}</p>
         <div className="meta-line">

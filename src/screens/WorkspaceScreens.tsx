@@ -10,7 +10,8 @@ import {
   verifyReceipt,
 } from '../domain/artifacts'
 import { upsert } from '../domain/collection'
-import { importGitHubOpportunity, searchGitHubOpportunities } from '../domain/github'
+import { importGitHubOpportunity, searchBountyOpportunities, searchGitHubOpportunities } from '../domain/github'
+import type { OpportunitySnapshot } from '../domain/types'
 import { scoreOpportunity } from '../domain/scoring'
 import type { AgentTrace } from '../domain/types'
 import { identityLabel } from '../domain/ens'
@@ -49,11 +50,9 @@ export function Sources({ state, setState }: { state: State; setState: SetState 
   const [url, setUrl] = useState('https://github.com/microsoft/TypeScript/issues/9998')
   const [loading, setLoading] = useState(false)
   const [searching, setSearching] = useState(false)
+  const [findingBounties, setFindingBounties] = useState(false)
 
-  async function runSearch(term: string) {
-    if (!term.trim()) return
-    setSearching(true)
-    const results = await searchGitHubOpportunities(term, import.meta.env.VITE_GITHUB_TOKEN)
+  function ingest(results: OpportunitySnapshot[]) {
     setState((current) => {
       let opportunities = current.opportunities
       let scorecards = current.scorecards
@@ -63,6 +62,18 @@ export function Sources({ state, setState }: { state: State; setState: SetState 
       }
       return { ...current, opportunities, scorecards }
     })
+  }
+
+  async function findBounties() {
+    setFindingBounties(true)
+    ingest(await searchBountyOpportunities(import.meta.env.VITE_GITHUB_TOKEN))
+    setFindingBounties(false)
+  }
+
+  async function runSearch(term: string) {
+    if (!term.trim()) return
+    setSearching(true)
+    ingest(await searchGitHubOpportunities(term, import.meta.env.VITE_GITHUB_TOKEN))
     setSearching(false)
   }
 
@@ -81,8 +92,8 @@ export function Sources({ state, setState }: { state: State; setState: SetState 
 
   return (
     <>
-      <PageHeader eyebrow="Live source import" title="Find live work">
-        <p>Search open GitHub issues by label, keyword, or owner/repo and import many at once. Each is scored live.</p>
+      <PageHeader eyebrow="Live source import" title="Find paid work" action={<Button variant="primary" onClick={findBounties} disabled={findingBounties}>{findingBounties ? 'Finding paid bounties…' : 'Find paid bounties 💎'}</Button>}>
+        <p>Pull live paid bounties (real $ rewards), or search open GitHub issues by label, keyword, or owner/repo. Each is scored live for winnability.</p>
       </PageHeader>
       <form className="panel panel-pad form" onSubmit={(event) => { event.preventDefault(); runSearch(query) }}>
         <Field label="Search GitHub work" value={query} onChange={setQuery} placeholder="good first issue, a label, or owner/repo" />

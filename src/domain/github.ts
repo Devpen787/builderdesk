@@ -9,6 +9,9 @@ type GitHubIssueResponse = {
   labels?: Array<{ name?: string } | string>
   updated_at?: string
   pull_request?: unknown
+  comments?: number
+  assignee?: { login?: string } | null
+  assignees?: Array<{ login?: string }>
 }
 
 const GITHUB_PATH = /^\/([^/]+)\/([^/]+)\/(issues|pull)\/(\d+)\/?$/
@@ -74,6 +77,23 @@ export async function searchGitHubOpportunities(
 ): Promise<OpportunitySnapshot[]> {
   const q = buildSearchQuery(query)
   if (!q) return []
+  return runIssueSearch(q, token, fetcher)
+}
+
+// Live paid bounties: GitHub issues carrying the cross-platform "💎 Bounty"
+// label (Algora and others), which put a real dollar amount on the issue.
+export async function searchBountyOpportunities(
+  token?: string,
+  fetcher: typeof fetch = fetch,
+): Promise<OpportunitySnapshot[]> {
+  return runIssueSearch('label:"💎 Bounty" is:issue is:open', token, fetcher)
+}
+
+async function runIssueSearch(
+  q: string,
+  token?: string,
+  fetcher: typeof fetch = fetch,
+): Promise<OpportunitySnapshot[]> {
   try {
     const headers: Record<string, string> = { Accept: 'application/vnd.github+json' }
     if (token) headers.Authorization = `Bearer ${token}`
@@ -112,24 +132,29 @@ export function normalizeGitHubIssue(
     typeof label === 'string' ? label : label.name ?? '',
   ).filter(Boolean)
   const isPartial = !payload.title || body.length < 40
-  const rewardSignal = extractRewardSignal(body)
+  const title = payload.title ?? `${target.owner}/${target.repo} #${target.number}`
+  const rewardAmountUsd = extractRewardAmount(`${title} ${body}`)
+  const assigned = Boolean(payload.assignee) || (payload.assignees?.length ?? 0) > 0
   return {
     id: snapshotId(target),
     target,
     sourceState: isPartial ? 'partial' : 'live',
     claimMode: 'live',
     importedAt: new Date().toISOString(),
-    title: payload.title ?? `${target.owner}/${target.repo} #${target.number}`,
+    title,
     bodyPreview: body ? trimText(body, 280) : 'No public description was available from GitHub.',
     stateLabel: payload.state ?? 'unknown',
     labels,
     author: payload.user?.login ?? 'unknown',
-    rewardSignal,
+    rewardSignal: rewardAmountUsd > 0 ? `$${rewardAmountUsd.toLocaleString()}` : extractRewardSignal(body),
     deadlineSignal: extractDeadlineSignal(body),
     sourceHealthNote: isPartial
       ? 'Live GitHub import worked, but the source has limited public detail.'
       : 'Live GitHub import completed with enough public context to score.',
     lastActivityAt: payload.updated_at,
+    rewardAmountUsd: rewardAmountUsd > 0 ? rewardAmountUsd : undefined,
+    assigned,
+    comments: payload.comments ?? 0,
   }
 }
 
@@ -164,6 +189,15 @@ function brokenSnapshot(input: string, note: string): OpportunitySnapshot {
 
 function snapshotId(target: GitHubTarget) {
   return `${target.owner}-${target.repo}-${target.kind}-${target.number}`.toLowerCase()
+}
+
+// Parse a real USD amount from bounty text: "$2k", "$1,500", "$500".
+function extractRewardAmount(text: string): number {
+  const match = text.match(/\$\s?([\d,]+(?:\.\d+)?)\s?([kK])?/)
+  if (!match) return 0
+  let amount = Number(match[1].replace(/,/g, ''))
+  if (match[2]) amount *= 1000
+  return Number.isFinite(amount) ? Math.round(amount) : 0
 }
 
 function extractRewardSignal(body: string) {
