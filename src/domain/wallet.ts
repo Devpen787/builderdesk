@@ -21,6 +21,28 @@ export function defaultWalletAddress(): string | undefined {
   return (import.meta.env.VITE_AGENT_WALLET_ADDRESS as string | undefined) || undefined
 }
 
+type Eip1193Provider = {
+  request: (args: { method: string; params?: unknown[] }) => Promise<unknown>
+}
+
+// "Connect with MetaMask": opens the injected wallet and returns the selected
+// account. One click, no pasting. Browser-extension only — callers fall back to
+// the address/ENS field when there's no injected provider.
+export async function connectInjectedWallet(): Promise<{ address?: string; error?: string }> {
+  const injected = (window as unknown as { ethereum?: Eip1193Provider }).ethereum
+  if (!injected) {
+    return { error: 'No browser wallet detected. Install the MetaMask extension, or paste an address below.' }
+  }
+  try {
+    const accounts = (await injected.request({ method: 'eth_requestAccounts' })) as string[]
+    const address = accounts?.[0]
+    if (!address) return { error: 'MetaMask returned no account.' }
+    return { address }
+  } catch {
+    return { error: 'Connection request was rejected in MetaMask.' }
+  }
+}
+
 type Network = { key: string; label: string; chain: Parameters<typeof createPublicClient>[0]['chain']; rpc: string; explorer: string; testnet: boolean }
 
 const NETWORKS: Network[] = [

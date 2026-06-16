@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AGENT_WALLET_INFO, defaultWalletAddress, fetchWalletOverview, formatEth } from '../domain/wallet'
+import { AGENT_WALLET_INFO, connectInjectedWallet, defaultWalletAddress, fetchWalletOverview, formatEth } from '../domain/wallet'
 import type { WalletOverview } from '../domain/wallet'
 import { resolveEns } from '../domain/ens'
 import { useAppState } from '../store'
@@ -18,7 +18,21 @@ function ConnectWallet({ setState }: { setState: Store['setState'] }) {
   const [connecting, setConnecting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  async function connect() {
+  async function connectMetaMask() {
+    setConnecting(true)
+    setError(null)
+    const result = await connectInjectedWallet()
+    if (result.error || !result.address) {
+      setError(result.error ?? 'Could not connect.')
+      setConnecting(false)
+      return
+    }
+    const ens = await resolveEns(result.address)
+    setConnecting(false)
+    setState((current) => ({ ...current, wallet: { address: result.address as string, ensName: ens.ensName } }))
+  }
+
+  async function connectByInput() {
     setConnecting(true)
     setError(null)
     const result = await resolveEns(input)
@@ -27,21 +41,25 @@ function ConnectWallet({ setState }: { setState: Store['setState'] }) {
       setError(result.note)
       return
     }
-    const connected = { address: result.address, ensName: result.ensName }
-    setState((current) => ({ ...current, wallet: connected }))
+    setState((current) => ({ ...current, wallet: { address: result.address as string, ensName: result.ensName } }))
   }
 
   return (
     <>
       <PageHeader eyebrow="Agent wallet" title="Connect your wallet">
-        <p>Connect any wallet to see it live in BuilderDesk — paste your address or ENS name. Read-only; BuilderDesk never holds your keys.</p>
+        <p>Connect your wallet to see it live in BuilderDesk. Read-only; BuilderDesk never holds your keys.</p>
       </PageHeader>
       <Panel className="panel-pad">
+        <Button variant="primary" onClick={connectMetaMask} disabled={connecting}>{connecting ? 'Connecting…' : 'Connect with MetaMask'}</Button>
+        <p className="row-meta" style={{ marginTop: 8 }}>Opens your MetaMask extension and connects the selected account in one click.</p>
+
+        <div className="connect-divider">or paste an address</div>
+
         <div className="field">
           <label>Wallet address or ENS name</label>
           <div className="inline-field">
             <input className="input" value={input} onChange={(event) => setInput(event.target.value)} placeholder="0x… or name.eth" />
-            <Button variant="primary" onClick={connect} disabled={connecting || !input.trim()}>{connecting ? 'Connecting…' : 'Connect'}</Button>
+            <Button onClick={connectByInput} disabled={connecting || !input.trim()}>Connect</Button>
           </div>
           {error && (
             <div className="identity-result">
@@ -52,7 +70,7 @@ function ConnectWallet({ setState }: { setState: Store['setState'] }) {
         </div>
         <ul style={{ marginTop: 16 }}>
           <li>Your address and balances are public on-chain — nothing secret is shared.</li>
-          <li>For a MetaMask Agent Wallet, paste its address; it stays TEE-custodied and Guard-Mode protected.</li>
+          <li>A MetaMask Agent Wallet isn't in the extension — paste its address here to watch it.</li>
         </ul>
       </Panel>
     </>
