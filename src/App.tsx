@@ -34,7 +34,7 @@ function App() {
       {path === '/app' && <Home state={state} />}
       {path === '/sources' && <Sources state={state} setState={setState} />}
       {path === '/radar' && <Radar state={state} setState={setState} />}
-      {path === '/wallet' && <Wallet state={state} setState={setState} />}
+      {path === '/wallet' && <Wallet />}
       {path === '/profile' && <Profile state={state} />}
       {pursuitId && <Pursuit state={state} id={pursuitId} setState={setState} />}
       {workroomId && <Workroom state={state} id={workroomId} setState={setState} />}

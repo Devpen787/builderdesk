@@ -1,5 +1,35 @@
 import { createPublicClient, http, formatEther, type Address } from 'viem'
 import { mainnet, base, sepolia, lineaSepolia } from 'viem/chains'
+import type { ConnectedWallet } from './types'
+
+// The connected wallet persists in its own dedicated key, written synchronously
+// on connect — independent of the app-state blob, so nothing can clobber it.
+const CONNECTED_WALLET_KEY = 'builderdesk.connected_wallet'
+
+export function loadConnectedWallet(): ConnectedWallet | undefined {
+  try {
+    const raw = localStorage.getItem(CONNECTED_WALLET_KEY)
+    return raw ? (JSON.parse(raw) as ConnectedWallet) : undefined
+  } catch {
+    return undefined
+  }
+}
+
+export function saveConnectedWallet(wallet: ConnectedWallet): void {
+  try {
+    localStorage.setItem(CONNECTED_WALLET_KEY, JSON.stringify(wallet))
+  } catch {
+    /* storage unavailable */
+  }
+}
+
+export function clearConnectedWallet(): void {
+  try {
+    localStorage.removeItem(CONNECTED_WALLET_KEY)
+  } catch {
+    /* storage unavailable */
+  }
+}
 
 // Descriptive facts about a MetaMask Agent Wallet (not a per-address claim).
 // No address and no secret lives here — each builder connects their own wallet,

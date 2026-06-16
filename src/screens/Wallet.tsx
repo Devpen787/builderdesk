@@ -1,19 +1,42 @@
 import { useEffect, useState } from 'react'
-import { AGENT_WALLET_INFO, connectInjectedWallet, defaultWalletAddress, fetchWalletOverview, formatEth } from '../domain/wallet'
+import {
+  AGENT_WALLET_INFO,
+  clearConnectedWallet,
+  connectInjectedWallet,
+  defaultWalletAddress,
+  fetchWalletOverview,
+  formatEth,
+  loadConnectedWallet,
+  saveConnectedWallet,
+} from '../domain/wallet'
 import type { WalletOverview } from '../domain/wallet'
+import type { ConnectedWallet } from '../domain/types'
 import { resolveEns } from '../domain/ens'
-import { useAppState } from '../store'
 import { Badge, Button, PageHeader, Panel } from '../components'
 
-type Store = ReturnType<typeof useAppState>
+export function Wallet() {
+  const [wallet, setWallet] = useState<ConnectedWallet | undefined>(() => {
+    const stored = loadConnectedWallet()
+    if (stored) return stored
+    const preset = defaultWalletAddress()
+    return preset ? { address: preset } : undefined
+  })
 
-export function Wallet({ state, setState }: { state: Store['state']; setState: Store['setState'] }) {
-  const address = state.wallet?.address ?? defaultWalletAddress()
-  if (!address) return <ConnectWallet setState={setState} />
-  return <WalletDashboard address={address} ensName={state.wallet?.ensName} setState={setState} />
+  function connect(next: ConnectedWallet) {
+    saveConnectedWallet(next) // synchronous write — persists immediately
+    setWallet(next)
+  }
+
+  function disconnect() {
+    clearConnectedWallet()
+    setWallet(undefined)
+  }
+
+  if (!wallet) return <ConnectWallet onConnect={connect} />
+  return <WalletDashboard wallet={wallet} onChange={disconnect} />
 }
 
-function ConnectWallet({ setState }: { setState: Store['setState'] }) {
+function ConnectWallet({ onConnect }: { onConnect: (wallet: ConnectedWallet) => void }) {
   const [input, setInput] = useState('')
   const [connecting, setConnecting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -29,7 +52,7 @@ function ConnectWallet({ setState }: { setState: Store['setState'] }) {
     }
     const ens = await resolveEns(result.address)
     setConnecting(false)
-    setState((current) => ({ ...current, wallet: { address: result.address as string, ensName: ens.ensName } }))
+    onConnect({ address: result.address, ensName: ens.ensName })
   }
 
   async function connectByInput() {
@@ -41,7 +64,7 @@ function ConnectWallet({ setState }: { setState: Store['setState'] }) {
       setError(result.note)
       return
     }
-    setState((current) => ({ ...current, wallet: { address: result.address as string, ensName: result.ensName } }))
+    onConnect({ address: result.address, ensName: result.ensName })
   }
 
   return (
@@ -77,10 +100,11 @@ function ConnectWallet({ setState }: { setState: Store['setState'] }) {
   )
 }
 
-function WalletDashboard({ address, ensName, setState }: { address: string; ensName?: string; setState: Store['setState'] }) {
+function WalletDashboard({ wallet, onChange }: { wallet: ConnectedWallet; onChange: () => void }) {
   const [data, setData] = useState<WalletOverview | null>(null)
   const [loading, setLoading] = useState(true)
   const [copied, setCopied] = useState(false)
+  const address = wallet.address
 
   async function refresh() {
     setLoading(true)
@@ -107,11 +131,7 @@ function WalletDashboard({ address, ensName, setState }: { address: string; ensN
     setTimeout(() => setCopied(false), 1500)
   }
 
-  function disconnect() {
-    setState((current) => ({ ...current, wallet: undefined }))
-  }
-
-  const displayEns = data?.ensName ?? ensName
+  const displayEns = data?.ensName ?? wallet.ensName
 
   return (
     <>
@@ -121,11 +141,11 @@ function WalletDashboard({ address, ensName, setState }: { address: string; ensN
         action={
           <div className="actions" style={{ marginTop: 0 }}>
             <Button onClick={refresh} disabled={loading}>{loading ? 'Reading…' : 'Refresh'}</Button>
-            <Button onClick={disconnect}>Change</Button>
+            <Button onClick={onChange}>Change</Button>
           </div>
         }
       >
-        <p>Read live on-chain. No extension, no CLI, nothing to manage.</p>
+        <p>Read live on-chain. No extension, no CLI, nothing to manage. Stays connected across sessions.</p>
       </PageHeader>
 
       <div className="two-col">

@@ -130,7 +130,6 @@ export type ConnectedWallet = {
 
 export type AppState = {
   profile?: BuilderProfile
-  wallet?: ConnectedWallet
   opportunities: OpportunitySnapshot[]
   scorecards: QualificationScorecard[]
   packets: PursuitPacket[]
