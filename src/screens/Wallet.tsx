@@ -12,6 +12,8 @@ import {
 import type { WalletOverview } from '../domain/wallet'
 import type { ConnectedWallet } from '../domain/types'
 import { resolveEns } from '../domain/ens'
+import { supabaseConfigured } from '../lib/supabase'
+import { signInWithEthereum } from '../lib/auth'
 import { Badge, Button, PageHeader, Panel } from '../components'
 
 export function Wallet() {
@@ -55,6 +57,20 @@ function ConnectWallet({ onConnect }: { onConnect: (wallet: ConnectedWallet) => 
     onConnect({ address: result.address, ensName: ens.ensName })
   }
 
+  async function signIn() {
+    setConnecting(true)
+    setError(null)
+    const result = await signInWithEthereum()
+    if (result.error || !result.address) {
+      setError(result.error ?? 'Sign-in failed.')
+      setConnecting(false)
+      return
+    }
+    const ens = await resolveEns(result.address)
+    setConnecting(false)
+    onConnect({ address: result.address, ensName: ens.ensName })
+  }
+
   async function connectByInput() {
     setConnecting(true)
     setError(null)
@@ -73,8 +89,17 @@ function ConnectWallet({ onConnect }: { onConnect: (wallet: ConnectedWallet) => 
         <p>Connect your wallet to see it live in BuilderDesk. Read-only; BuilderDesk never holds your keys.</p>
       </PageHeader>
       <Panel className="panel-pad">
-        <Button variant="primary" onClick={connectMetaMask} disabled={connecting}>{connecting ? 'Connecting…' : 'Connect with MetaMask'}</Button>
-        <p className="row-meta" style={{ marginTop: 8 }}>Opens your MetaMask extension and connects the selected account in one click.</p>
+        {supabaseConfigured ? (
+          <>
+            <Button variant="primary" onClick={signIn} disabled={connecting}>{connecting ? 'Signing in…' : 'Sign in with Ethereum'}</Button>
+            <p className="row-meta" style={{ marginTop: 8 }}>Signs you in with your wallet (SIWE) and saves your desk to your account — across devices.</p>
+          </>
+        ) : (
+          <>
+            <Button variant="primary" onClick={connectMetaMask} disabled={connecting}>{connecting ? 'Connecting…' : 'Connect with MetaMask'}</Button>
+            <p className="row-meta" style={{ marginTop: 8 }}>Opens your MetaMask extension and connects the selected account in one click.</p>
+          </>
+        )}
 
         <div className="connect-divider">or paste an address</div>
 
