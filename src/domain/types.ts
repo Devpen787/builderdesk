@@ -123,8 +123,14 @@ export type AcceptedWorkReceipt = {
   releasedBy?: string
 }
 
+export type ConnectedWallet = {
+  address: string
+  ensName?: string
+}
+
 export type AppState = {
   profile?: BuilderProfile
+  wallet?: ConnectedWallet
   opportunities: OpportunitySnapshot[]
   scorecards: QualificationScorecard[]
   packets: PursuitPacket[]

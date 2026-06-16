@@ -1,12 +1,10 @@
 import { createPublicClient, http, formatEther, type Address } from 'viem'
 import { mainnet, base, sepolia, lineaSepolia } from 'viem/chains'
 
-// The MetaMask Agent Wallet. Address is public; override via env if needed.
-// Custody type and policy are configured facts (set with `mm init --wallet
-// server-wallet --mode guard`). No secret ever lives here.
-export const AGENT_WALLET = {
-  address: (import.meta.env.VITE_AGENT_WALLET_ADDRESS as string | undefined) ??
-    '0x09b7815143de8d7ecc093dd6eb70e94e041ba40d',
+// Descriptive facts about a MetaMask Agent Wallet (not a per-address claim).
+// No address and no secret lives here — each builder connects their own wallet,
+// stored in their local app state.
+export const AGENT_WALLET_INFO = {
   custody: 'Server wallet — keys held in a TEE (no seed phrase exists)',
   mode: 'Guard Mode',
   policy: [
@@ -15,6 +13,12 @@ export const AGENT_WALLET = {
     'Blockaid threat-scanning on every transaction',
     '2FA approval required for any out-of-policy action',
   ],
+}
+
+// Optional deployment-level default (e.g. a private local build can preset its
+// own wallet). Unset by default, so the public app shows the connect flow.
+export function defaultWalletAddress(): string | undefined {
+  return (import.meta.env.VITE_AGENT_WALLET_ADDRESS as string | undefined) || undefined
 }
 
 type Network = { key: string; label: string; chain: Parameters<typeof createPublicClient>[0]['chain']; rpc: string; explorer: string; testnet: boolean }
