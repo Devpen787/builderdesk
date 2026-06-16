@@ -14,6 +14,7 @@ import type { ConnectedWallet } from '../domain/types'
 import { resolveEns } from '../domain/ens'
 import { supabase, supabaseConfigured } from '../lib/supabase'
 import { signInWithEthereum } from '../lib/auth'
+import { loadPrimaryWalletRemote, saveWalletRemote } from '../lib/sync'
 import { Badge, Button, PageHeader, Panel } from '../components'
 
 export function Wallet() {
@@ -25,7 +26,8 @@ export function Wallet() {
   })
 
   function connect(next: ConnectedWallet) {
-    saveConnectedWallet(next) // synchronous write — persists immediately
+    saveConnectedWallet(next) // synchronous local write — persists immediately
+    void saveWalletRemote(next) // also saves to your account when signed in
     setWallet(next)
   }
 
@@ -93,6 +95,8 @@ function ConnectWallet({ onConnect }: { onConnect: (wallet: ConnectedWallet) => 
       return
     }
     setSignedIn(true)
+    const saved = await loadPrimaryWalletRemote()
+    if (saved) onConnect(saved)
   }
 
   return (

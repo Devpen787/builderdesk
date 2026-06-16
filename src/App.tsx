@@ -1,5 +1,9 @@
+import { useEffect } from 'react'
 import { OrganizerShell } from './components'
 import { routeParam, usePath } from './router'
+import { supabaseConfigured } from './lib/supabase'
+import { loadProfileRemote } from './lib/sync'
+import { defaultProfile } from './store'
 import { BrandLab } from './screens/BrandLab'
 import { Landing } from './screens/Landing'
 import { Onboarding } from './screens/PublicScreens'
@@ -20,6 +24,29 @@ import './styles.css'
 function App() {
   const path = usePath()
   const { state, setState } = useAppState()
+
+  // Restore the account-backed profile when signed in (cross-device).
+  useEffect(() => {
+    if (!supabaseConfigured) return
+    loadProfileRemote().then((remote) => {
+      const name = remote?.name
+      if (!name) return
+      setState((current) => {
+        const base = current.profile ?? defaultProfile(name, '', '', '', '')
+        return {
+          ...current,
+          profile: {
+            ...base,
+            name,
+            skills: remote.skills ?? base.skills,
+            ecosystems: remote.ecosystems ?? base.ecosystems,
+            capacity: remote.capacity ?? base.capacity,
+          },
+        }
+      })
+    })
+  }, [setState])
+
   const pursuitId = routeParam(path, /^\/pursuits\/([^/]+)$/)
   const workroomId = routeParam(path, /^\/pursuits\/([^/]+)\/workroom$/)
   const submissionId = routeParam(path, /^\/pursuits\/([^/]+)\/submission$/)

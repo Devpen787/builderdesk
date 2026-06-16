@@ -4,6 +4,7 @@ import { defaultProfile, useAppState } from '../store'
 import { navigate } from '../router'
 import { resolveEns, shortenAddress } from '../domain/ens'
 import type { EnsIdentity } from '../domain/ens'
+import { saveProfileRemote } from '../lib/sync'
 import { useBuilderAuth } from '../auth/privy'
 import { Badge, Button, Field, PageHeader, PublicShell } from '../components'
 
@@ -42,7 +43,9 @@ export function Onboarding({ setState }: { setState: ReturnType<typeof useAppSta
   function submit(event: FormEvent) {
     event.preventDefault()
     const resolvedIdentity = ens?.resolved ? { address: ens.address, ensName: ens.ensName } : undefined
-    setState((state) => ({ ...state, profile: defaultProfile(name, email, skills, ecosystems, capacity, resolvedIdentity) }))
+    const profile = defaultProfile(name, email, skills, ecosystems, capacity, resolvedIdentity)
+    setState((state) => ({ ...state, profile }))
+    void saveProfileRemote(profile) // saves to your account when signed in
     navigate('/app')
   }
 
