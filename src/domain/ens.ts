@@ -20,28 +20,37 @@ export async function resolveEns(input: string): Promise<EnsIdentity> {
   const value = input.trim()
   if (!value) return { input, resolved: false, note: 'Enter an ENS name or wallet address.' }
 
-  try {
-    if (isAddress(value)) {
-      const ensName = await client.getEnsName({ address: value })
-      return {
-        input,
-        address: value,
-        ensName: ensName ?? undefined,
-        resolved: true,
-        note: ensName ? `Primary name ${ensName}.` : 'Valid address. No primary ENS name set.',
-      }
+  // A valid address always connects. The ENS reverse-name is best-effort, so a
+  // flaky RPC never blocks connecting a perfectly valid address.
+  if (isAddress(value)) {
+    let ensName: string | undefined
+    try {
+      ensName = (await client.getEnsName({ address: value })) ?? undefined
+    } catch {
+      ensName = undefined
     }
-    if (value.includes('.')) {
+    return {
+      input,
+      address: value,
+      ensName,
+      resolved: true,
+      note: ensName ? `Primary name ${ensName}.` : 'Valid address.',
+    }
+  }
+
+  if (value.includes('.')) {
+    try {
       const address = await client.getEnsAddress({ name: normalize(value) })
       if (address) {
         return { input, address, ensName: value, resolved: true, note: `${value} resolves to ${shortenAddress(address)}.` }
       }
       return { input, ensName: value, resolved: false, note: `${value} does not resolve to an address.` }
+    } catch {
+      return { input, ensName: value, resolved: false, note: 'ENS lookup failed. Try again.' }
     }
-    return { input, resolved: false, note: 'Enter a full ENS name (name.eth) or a 0x address.' }
-  } catch {
-    return { input, resolved: false, note: 'ENS lookup failed. Check the name or try again.' }
   }
+
+  return { input, resolved: false, note: 'Enter a full ENS name (name.eth) or a 0x address.' }
 }
 
 export function shortenAddress(address: string) {
