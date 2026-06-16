@@ -3,6 +3,7 @@ import { routeParam, usePath } from './router'
 import { BrandLab } from './screens/BrandLab'
 import { Landing } from './screens/Landing'
 import { Onboarding } from './screens/PublicScreens'
+import { Wallet } from './screens/Wallet'
 import {
   Home,
   Profile,
@@ -33,6 +34,7 @@ function App() {
       {path === '/app' && <Home state={state} />}
       {path === '/sources' && <Sources state={state} setState={setState} />}
       {path === '/radar' && <Radar state={state} setState={setState} />}
+      {path === '/wallet' && <Wallet />}
       {path === '/profile' && <Profile state={state} />}
       {pursuitId && <Pursuit state={state} id={pursuitId} setState={setState} />}
       {workroomId && <Workroom state={state} id={workroomId} setState={setState} />}

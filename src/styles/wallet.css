@@ -1,0 +1,16 @@
+.wallet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space3);
+}
+
+.wallet-address {
+  margin-top: var(--space3);
+  padding: var(--space3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-muted);
+  font-size: var(--small-size);
+  word-break: break-all;
+}

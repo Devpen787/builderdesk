@@ -86,6 +86,7 @@ export function OrganizerShell({ children, path }: { children: ReactNode; path: 
     ['/app', 'Home'],
     ['/sources', 'Sources'],
     ['/radar', 'Radar'],
+    ['/wallet', 'Wallet'],
     ['/profile', 'Profile'],
   ]
   return (
