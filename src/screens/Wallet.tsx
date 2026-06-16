@@ -12,7 +12,7 @@ import {
 import type { WalletOverview } from '../domain/wallet'
 import type { ConnectedWallet } from '../domain/types'
 import { resolveEns } from '../domain/ens'
-import { supabaseConfigured } from '../lib/supabase'
+import { supabase, supabaseConfigured } from '../lib/supabase'
 import { signInWithEthereum } from '../lib/auth'
 import { Badge, Button, PageHeader, Panel } from '../components'
 
@@ -41,7 +41,19 @@ export function Wallet() {
 function ConnectWallet({ onConnect }: { onConnect: (wallet: ConnectedWallet) => void }) {
   const [input, setInput] = useState('')
   const [connecting, setConnecting] = useState(false)
+  const [signingIn, setSigningIn] = useState(false)
+  const [signedIn, setSignedIn] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    let active = true
+    supabase?.auth.getSession().then(({ data }) => {
+      if (active) setSignedIn(Boolean(data.session))
+    })
+    return () => {
+      active = false
+    }
+  }, [])
 
   async function connectMetaMask() {
     setConnecting(true)
@@ -49,20 +61,6 @@ function ConnectWallet({ onConnect }: { onConnect: (wallet: ConnectedWallet) => 
     const result = await connectInjectedWallet()
     if (result.error || !result.address) {
       setError(result.error ?? 'Could not connect.')
-      setConnecting(false)
-      return
-    }
-    const ens = await resolveEns(result.address)
-    setConnecting(false)
-    onConnect({ address: result.address, ensName: ens.ensName })
-  }
-
-  async function signIn() {
-    setConnecting(true)
-    setError(null)
-    const result = await signInWithEthereum()
-    if (result.error || !result.address) {
-      setError(result.error ?? 'Sign-in failed.')
       setConnecting(false)
       return
     }
@@ -83,23 +81,28 @@ function ConnectWallet({ onConnect }: { onConnect: (wallet: ConnectedWallet) => 
     onConnect({ address: result.address, ensName: result.ensName })
   }
 
+  // Sign-in is a separate concern: it logs you into your account to save across
+  // devices. It does NOT change which wallet you're viewing.
+  async function signIn() {
+    setSigningIn(true)
+    setError(null)
+    const result = await signInWithEthereum()
+    setSigningIn(false)
+    if (result.error) {
+      setError(result.error)
+      return
+    }
+    setSignedIn(true)
+  }
+
   return (
     <>
       <PageHeader eyebrow="Agent wallet" title="Connect your wallet">
-        <p>Connect your wallet to see it live in BuilderDesk. Read-only; BuilderDesk never holds your keys.</p>
+        <p>Connect a wallet to see it live in BuilderDesk. Read-only; BuilderDesk never holds your keys.</p>
       </PageHeader>
       <Panel className="panel-pad">
-        {supabaseConfigured ? (
-          <>
-            <Button variant="primary" onClick={signIn} disabled={connecting}>{connecting ? 'Signing in…' : 'Sign in with Ethereum'}</Button>
-            <p className="row-meta" style={{ marginTop: 8 }}>Signs you in with your wallet (SIWE) and saves your desk to your account — across devices.</p>
-          </>
-        ) : (
-          <>
-            <Button variant="primary" onClick={connectMetaMask} disabled={connecting}>{connecting ? 'Connecting…' : 'Connect with MetaMask'}</Button>
-            <p className="row-meta" style={{ marginTop: 8 }}>Opens your MetaMask extension and connects the selected account in one click.</p>
-          </>
-        )}
+        <Button variant="primary" onClick={connectMetaMask} disabled={connecting}>{connecting ? 'Connecting…' : 'Connect with MetaMask'}</Button>
+        <p className="row-meta" style={{ marginTop: 8 }}>Connects the account selected in your MetaMask extension, to view it.</p>
 
         <div className="connect-divider">or paste an address</div>
 
@@ -118,8 +121,21 @@ function ConnectWallet({ onConnect }: { onConnect: (wallet: ConnectedWallet) => 
         </div>
         <ul style={{ marginTop: 16 }}>
           <li>Your address and balances are public on-chain — nothing secret is shared.</li>
-          <li>A MetaMask Agent Wallet isn't in the extension — paste its address here to watch it.</li>
+          <li><strong>Your agent wallet isn't in the extension</strong> — paste its address above to view it.</li>
         </ul>
+
+        {supabaseConfigured && (
+          <div className="account-section">
+            {signedIn ? (
+              <Badge label="Signed in · your desk saves to your account" tone="good" />
+            ) : (
+              <>
+                <Button onClick={signIn} disabled={signingIn}>{signingIn ? 'Signing in…' : 'Sign in with Ethereum'}</Button>
+                <span className="identity-note">Optional — saves your desk across devices. Doesn’t change which wallet you view.</span>
+              </>
+            )}
+          </div>
+        )}
       </Panel>
     </>
   )

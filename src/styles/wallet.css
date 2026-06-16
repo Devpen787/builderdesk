@@ -31,3 +31,18 @@
   height: 1px;
   background: var(--line);
 }
+
+.account-section {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space3);
+  margin-top: var(--space5);
+  padding-top: var(--space4);
+  border-top: 1px solid var(--line);
+}
+
+.account-section .identity-note {
+  color: var(--ink-muted);
+  font-size: var(--small-size);
+}
